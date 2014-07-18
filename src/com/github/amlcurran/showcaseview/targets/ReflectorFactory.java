@@ -19,7 +19,8 @@ class ReflectorFactory {
         return null;
     }
 
-    private static Reflector.ActionBarType searchForActivitySuperClass(Activity activity) {
+    @SuppressWarnings("rawtypes")
+	private static Reflector.ActionBarType searchForActivitySuperClass(Activity activity) {
         Class currentLevel = activity.getClass();
         while (currentLevel != Activity.class) {
             if (currentLevel.getSimpleName().equals("SherlockActivity") || currentLevel.getSimpleName().equals("SherlockFragmentActivity")) {

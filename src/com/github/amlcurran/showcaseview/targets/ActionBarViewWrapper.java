@@ -1,19 +1,20 @@
 package com.github.amlcurran.showcaseview.targets;
 
+import java.lang.reflect.Field;
+
 import android.util.Log;
 import android.view.View;
 import android.view.ViewParent;
-
-import java.lang.reflect.Field;
 
 /**
  * Class which wraps round the many implementations of ActionBarView and allows finding of Action
  * items
  */
+@SuppressWarnings("rawtypes")
 class ActionBarViewWrapper {
 
     private ViewParent mActionBarView;
-    private Class mActionBarViewClass;
+	private Class mActionBarViewClass;
     private Class mAbsActionBarViewClass;
 
     public ActionBarViewWrapper(ViewParent actionBarView) {

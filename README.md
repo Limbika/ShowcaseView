@@ -16,28 +16,8 @@ The library is based on the "Cling" view found in the Launcher on Ice-Cream Sand
 
 Please check out [the website](http://amlcurran.github.io/ShowcaseView/) for more information.
 
-<img src='./example@2x.png' width='270' height='480' />
-<img src='./example2@2x.png' width='270' height='480' />
-
-Set-up
-----
-
-The library is now only compatible with Gradle out of the box. To use this library in your project, either:
-
-* Add the dependency from Maven like so: `compile 'com.github.amlcurran.showcaseview:library:5.0.0-SNAPSHOT'`. You'll also need to add the Sonatype snapshots repository to your `repositories {}` tag like so:
-~~~
-repositories {
-    mavenCentral()
-    maven {
-        url 'https://oss.sonatype.org/content/repositories/snapshots'
-    }
-}
-~~~
-* Copy the library project into your Gradle project. In your settings.gradle, add the project (using the `include (':libary')` notation). Sync Gradle and then go ahead! 
-
-Is it worth using?
-----
-Perhaps. Why not ask [The Guardian](https://play.google.com/store/apps/details?id=com.guardian), [HaxSync](https://play.google.com/store/apps/details?id=org.mots.haxsync), or [AllCast](https://play.google.com/store/apps/details?id=com.koushikdutta.cast), which each use the library?
+<img src='./readme/example@2x.png' width='270' height='480' />
+<img src='./readme/example2@2x.png' width='270' height='480' />
 
 Usage
 ----

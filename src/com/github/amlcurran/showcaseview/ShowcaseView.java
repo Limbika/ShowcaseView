@@ -18,10 +18,9 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
+import com.github.amlcurran.showcaseview.AnimationFactory.AnimationEndListener;
+import com.github.amlcurran.showcaseview.AnimationFactory.AnimationStartListener;
 import com.github.amlcurran.showcaseview.targets.Target;
-
-import static com.github.amlcurran.showcaseview.AnimationFactory.AnimationEndListener;
-import static com.github.amlcurran.showcaseview.AnimationFactory.AnimationStartListener;
 
 /**
  * A view which allows you to showcase areas of your app with an explanation.
@@ -341,7 +340,7 @@ public class ShowcaseView extends RelativeLayout
         textDrawer.setContentText(text);
     }
 
-    private void setScaleMultiplier(float scaleMultiplier) {
+    public void setScaleMultiplier(float scaleMultiplier) {
         this.scaleMultiplier = scaleMultiplier;
     }
 
@@ -517,7 +516,7 @@ public class ShowcaseView extends RelativeLayout
     /**
      * Set the duration of the fading in and fading out of the ShowcaseView
      */
-    private void setFadeDurations(long fadeInMillis, long fadeOutMillis) {
+    public void setFadeDurations(long fadeInMillis, long fadeOutMillis) {
         this.fadeInMillis = fadeInMillis;
         this.fadeOutMillis = fadeOutMillis;
     }
