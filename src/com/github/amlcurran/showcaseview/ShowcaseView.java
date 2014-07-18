@@ -559,7 +559,7 @@ public class ShowcaseView extends RelativeLayout
 
         styled.recycle();
 
-        showcaseDrawer.setShowcaseColour(showcaseColor);
+        showcaseDrawer.setShowcaseCircleColor(showcaseColor);
         showcaseDrawer.setBackgroundColour(backgroundColor);
         tintButton(showcaseColor, tintButton);
         mEndButton.setText(buttonText);

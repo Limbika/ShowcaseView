@@ -20,7 +20,7 @@ class NewShowcaseDrawer extends StandardShowcaseDrawer {
     }
 
     @Override
-    public void setShowcaseColour(int color) {
+    public void setShowcaseCircleColor(int color) {
         eraserPaint.setColor(color);
     }
 

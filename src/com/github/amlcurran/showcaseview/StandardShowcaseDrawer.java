@@ -32,7 +32,7 @@ class StandardShowcaseDrawer implements ShowcaseDrawer {
     }
 
     @Override
-    public void setShowcaseColour(int color) {
+    public void setShowcaseCircleColor(int color) {
         showcaseDrawable.setColorFilter(color, PorterDuff.Mode.MULTIPLY);
     }
 
