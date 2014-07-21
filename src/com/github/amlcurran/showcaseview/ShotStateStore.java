@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 class ShotStateStore {
 
-    private static final String PREFS_SHOWCASE_INTERNAL = "showcase_internal";
+    private static final String PREFS_SHOWCASE_INTERNAL = ShotStateStore.class.getName();
     private static final int INVALID_SHOT_ID = -1;
 
     long shotId = INVALID_SHOT_ID;
