@@ -51,6 +51,8 @@ class TextDrawer {
 
     public void draw(Canvas canvas) {
         if (shouldDrawText()) {
+        	float offsetForTitle = 0;
+        	float offsetForDescription = 0;
             float[] textPosition = getBestTextPosition();
 
             if (!TextUtils.isEmpty(mTitle)) {
@@ -75,20 +77,19 @@ class TextDrawer {
                             Layout.Alignment.ALIGN_NORMAL,
                             1.2f, 1.0f, true);
                 }
-                float offsetForTitle = mDynamicTitleLayout != null ? mDynamicTitleLayout.getHeight() : 0;
+                offsetForTitle = mDynamicTitleLayout != null ? mDynamicTitleLayout.getHeight() : 0;
                 if (mDynamicDetailLayout != null) {
                     canvas.translate(textPosition[0], textPosition[1] + offsetForTitle);
                     mDynamicDetailLayout.draw(canvas);
                     canvas.restore();
                 }
-                float offsetForDescription = mDynamicDetailLayout != null ? mDynamicDetailLayout.getHeight() : 0;
-                
-                if (mBitmap != null) {
-    	            canvas.save();
-    	            canvas.drawColor(Color.TRANSPARENT);
-    	            canvas.drawBitmap(mBitmap, textPosition[0],  textPosition[1] + offsetForTitle + offsetForDescription , null);
-    	            canvas.restore();
-                }
+            }
+            if (mBitmap != null) {
+            	offsetForDescription = mDynamicDetailLayout != null ? mDynamicDetailLayout.getHeight() : 0;
+    	        canvas.save();
+    	        canvas.drawColor(Color.TRANSPARENT);
+    	        canvas.drawBitmap(mBitmap, textPosition[0],  textPosition[1] + offsetForTitle + offsetForDescription , null);
+    	        canvas.restore();
             }
         }
         hasRecalculated = false;
