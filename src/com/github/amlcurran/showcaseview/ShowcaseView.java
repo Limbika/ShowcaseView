@@ -112,7 +112,6 @@ public class ShowcaseView extends RelativeLayout
             }
             addView(mEndButton);
         }
-
     }
 
     private boolean hasShot() {
