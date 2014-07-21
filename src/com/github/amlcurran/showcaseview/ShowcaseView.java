@@ -134,7 +134,7 @@ public class ShowcaseView extends RelativeLayout
     }
 
     public void setTarget(final Target target) {
-        setShowcase(target, false);
+        setShowcase(target, true);
     }
 
     public void setShowcase(final Target target, final boolean animate) {
