@@ -16,9 +16,6 @@ The library is based on the "Cling" view found in the Launcher on Ice-Cream Sand
 
 Please check out [the website](http://amlcurran.github.io/ShowcaseView/) for more information.
 
-<img src='./readme/example@2x.png' width='270' height='480' />
-<img src='./readme/example2@2x.png' width='270' height='480' />
-
 Usage
 ----
 
