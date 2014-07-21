@@ -106,7 +106,7 @@ public class ShowcaseView extends RelativeLayout
             lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             lps.setMargins(margin, margin, margin, margin);
             mEndButton.setLayoutParams(lps);
-            mEndButton.setText(R.string.ok);
+            mEndButton.setText(android.R.string.ok);
             if (!hasCustomClickListener) {
                 mEndButton.setOnClickListener(this);
             }
@@ -290,6 +290,11 @@ public class ShowcaseView extends RelativeLayout
     public void show() {
         mEventListener.onShowcaseViewShow(this);
         fadeInShowcase();
+    }
+    
+    public void dismiss() {
+    	Activity activity = (Activity) getContext();
+        ((ViewGroup) activity.getWindow().getDecorView()).removeView(this);
     }
 
     private void fadeInShowcase() {
@@ -548,7 +553,7 @@ public class ShowcaseView extends RelativeLayout
         int showcaseColor = styled.getColor(R.styleable.ShowcaseView_sv_showcaseColor, HOLO_BLUE);
         String buttonText = styled.getString(R.styleable.ShowcaseView_sv_buttonText);
         if (TextUtils.isEmpty(buttonText)) {
-            buttonText = getResources().getString(R.string.ok);
+            buttonText = getResources().getString(android.R.string.ok);
         }
         boolean tintButton = styled.getBoolean(R.styleable.ShowcaseView_sv_tintButtonColor, true);
 
