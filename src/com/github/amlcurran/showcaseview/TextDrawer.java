@@ -81,16 +81,15 @@ class TextDrawer {
                     mDynamicDetailLayout.draw(canvas);
                     canvas.restore();
                 }
-                float offsetForDescription = mDynamicDetailLayout != null ? mDynamicDetailLayout.getHeight() : 0;
-                
-                if (mBitmap != null) {
+            }
+            if (mBitmap != null) {
+            float offsetForDescription = mDynamicDetailLayout != null ? mDynamicDetailLayout.getHeight() : 0;
     	            canvas.save();
     	            canvas.drawColor(Color.TRANSPARENT);
     	            canvas.drawBitmap(mBitmap, textPosition[0],  textPosition[1] + offsetForTitle + offsetForDescription , null);
     	            canvas.restore();
                 }
             }
-        }
         hasRecalculated = false;
     }
 
