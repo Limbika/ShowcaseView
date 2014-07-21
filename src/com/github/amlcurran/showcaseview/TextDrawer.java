@@ -2,7 +2,10 @@ package com.github.amlcurran.showcaseview;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.text.DynamicLayout;
 import android.text.Layout;
@@ -30,6 +33,7 @@ class TextDrawer {
     private TextAppearanceSpan mTitleSpan;
     private TextAppearanceSpan mDetailSpan;
     private boolean hasRecalculated;
+    private Bitmap mBitmap;
 
     public TextDrawer(Resources resources, ShowcaseAreaCalculator calculator, Context context) {
         padding = resources.getDimension(R.dimen.text_padding);
@@ -71,14 +75,20 @@ class TextDrawer {
                             Layout.Alignment.ALIGN_NORMAL,
                             1.2f, 1.0f, true);
                 }
-                float offsetForTitle = mDynamicTitleLayout != null ? mDynamicTitleLayout.getHeight() :
-                        0;
+                float offsetForTitle = mDynamicTitleLayout != null ? mDynamicTitleLayout.getHeight() : 0;
                 if (mDynamicDetailLayout != null) {
                     canvas.translate(textPosition[0], textPosition[1] + offsetForTitle);
                     mDynamicDetailLayout.draw(canvas);
                     canvas.restore();
                 }
-
+                float offsetForDescription = mDynamicDetailLayout != null ? mDynamicDetailLayout.getHeight() : 0;
+                
+                if (mBitmap != null) {
+    	            canvas.save();
+    	            canvas.drawColor(Color.TRANSPARENT);
+    	            canvas.drawBitmap(mBitmap, textPosition[0],  textPosition[1] + offsetForTitle + offsetForDescription , null);
+    	            canvas.restore();
+                }
             }
         }
         hasRecalculated = false;
@@ -190,6 +200,10 @@ class TextDrawer {
     public CharSequence getContentText() {
         return mDetails;
     }
+    
+    public void setImage(int res) {
+		mBitmap = BitmapFactory.decodeResource(this.context.getResources(), res);
+	}
 
     public float[] getBestTextPosition() {
         return mBestTextPosition;
@@ -198,4 +212,5 @@ class TextDrawer {
     public boolean shouldDrawText() {
         return !TextUtils.isEmpty(mTitle) || !TextUtils.isEmpty(mDetails);
     }
+
 }

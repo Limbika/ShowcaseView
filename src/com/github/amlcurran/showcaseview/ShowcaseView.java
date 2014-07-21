@@ -339,6 +339,11 @@ public class ShowcaseView extends RelativeLayout
     public void setContentText(CharSequence text) {
         textDrawer.setContentText(text);
     }
+    
+
+    public void setImage(int res) {
+    	textDrawer.setImage(res);
+	}
 
     public void setScaleMultiplier(float scaleMultiplier) {
         this.scaleMultiplier = scaleMultiplier;
@@ -416,6 +421,11 @@ public class ShowcaseView extends RelativeLayout
         public Builder setContentText(CharSequence text) {
             showcaseView.setContentText(text);
             return this;
+        }
+        
+        public Builder setImage(int res) {
+        	showcaseView.setImage(res);
+        	return this;
         }
 
         /**
@@ -496,7 +506,7 @@ public class ShowcaseView extends RelativeLayout
         invalidate();
     }
 
-    /**
+	/**
      * @see com.github.amlcurran.showcaseview.ShowcaseView.Builder#setSingleShot(long)
      */
     private void setSingleShot(long shotId) {
