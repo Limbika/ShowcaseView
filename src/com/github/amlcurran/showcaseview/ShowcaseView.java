@@ -104,7 +104,7 @@ public class ShowcaseView extends RelativeLayout
             RelativeLayout.LayoutParams lps = (LayoutParams) generateDefaultLayoutParams();
             lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
             
-            lps.addRule( true ? RelativeLayout.ALIGN_PARENT_RIGHT : RelativeLayout.ALIGN_PARENT_LEFT);
+            lps.addRule( isButtonRightPosition() ? RelativeLayout.ALIGN_PARENT_RIGHT : RelativeLayout.ALIGN_PARENT_LEFT);
             lps.setMargins(margin, margin, margin, margin);
             mEndButton.setLayoutParams(lps);
             mEndButton.setText(android.R.string.ok);
@@ -120,7 +120,7 @@ public class ShowcaseView extends RelativeLayout
     	if (getMeasuredWidth() - showcaseX > getMeasuredWidth() - 200)
     		return true;
     	else
-    		return false
+    		return false;
     }
 
     private boolean hasShot() {
