@@ -173,7 +173,7 @@ public class ShowcaseView extends RelativeLayout
 
     private void updateBitmap() {
         if (bitmapBuffer == null || haveBoundsChanged()) {
-            bitmapBuffer = Bitmap.createBitmap(getMeasuredWidth(), getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        	bitmapBuffer = Bitmap.createBitmap(getMeasuredWidth(), getMeasuredHeight(), Bitmap.Config.ARGB_8888);
         }
     }
 
@@ -402,7 +402,9 @@ public class ShowcaseView extends RelativeLayout
          * @return the created ShowcaseView
          */
         public ShowcaseView build() {
-            insertShowcaseView(showcaseView, activity);
+        	if ( !showcaseView.hasShot() ) {
+        		insertShowcaseView(showcaseView, activity);
+        	}
             return showcaseView;
         }
 
