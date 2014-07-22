@@ -9,28 +9,28 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">19sp</item>
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:background">#33FFFFFF</item>
+        <item name="android:background">@drawable/button</item>
     </style>
     <style name="ShowcaseView.Light">
         <item name="sv_titleTextAppearance">@style/TextAppearance.ShowcaseView.Title</item>
         <item name="sv_detailTextAppearance">@style/TextAppearance.ShowcaseView.Detail.Light</item>
-        <item name="sv_backgroundColor">@color/whitebutton</item>
+        <item name="sv_backgroundColor">@color/background</item>
         <item name="sv_buttonText">@android:string/ok</item>
     </style>
 
     <style name="ShowcaseView">
         <item name="sv_titleTextAppearance">@style/TextAppearance.ShowcaseView.Title</item>
         <item name="sv_detailTextAppearance">@style/TextAppearance.ShowcaseView.Detail</item>
-        <item name="sv_backgroundColor">@color/whitebutton</item>
+        <item name="sv_backgroundColor">@color/background</item>
         <item name="sv_buttonText">@android:string/ok</item>
     </style>
 
     <style name="TextAppearance.ShowcaseView.Title" parent="android:style/TextAppearance.Large">
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">@android:color/black</item>
     </style>
 
     <style name="TextAppearance.ShowcaseView.Detail" parent="android:style/TextAppearance">
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">@android:color/black</item>
     </style>
 
     <style name="TextAppearance.ShowcaseView.Detail.Light">
