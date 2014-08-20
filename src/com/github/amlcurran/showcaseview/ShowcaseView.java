@@ -292,6 +292,8 @@ public class ShowcaseView extends RelativeLayout
     }
     
     public void dismiss() {
+    	// If the type is set to one-shot, store that it has shot
+    	shotStateStore.storeShot();
     	Activity activity = (Activity) getContext();
         ((ViewGroup) activity.getWindow().getDecorView()).removeView(this);
     }

@@ -66,7 +66,7 @@ public class ShowCaseBox {
 	private void showShowcase(ShowcaseInfo info, final boolean singleShot) {
 		ShowcaseView.Builder builder = info.build(mActivity);
 		if ( singleShot ) {
-			builder.singleShot( getClass().getName().hashCode() + mShowcaseCurrent );
+			builder.singleShot( mActivity.getClass().getName().hashCode() + mShowcaseCurrent );
 		}
 		builder.setOnClickListener(new OnClickListener() {
 			
