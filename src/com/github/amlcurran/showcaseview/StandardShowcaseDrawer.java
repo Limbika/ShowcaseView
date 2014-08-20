@@ -72,9 +72,7 @@ class StandardShowcaseDrawer implements ShowcaseDrawer {
 
     @Override
     public void erase(Bitmap bitmapBuffer) {
-    	if ( bitmapBuffer != null ) {
     		bitmapBuffer.eraseColor(backgroundColour);
-    	}
     }
 
     @Override

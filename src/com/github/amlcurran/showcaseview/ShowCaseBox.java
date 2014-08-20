@@ -72,7 +72,7 @@ public class ShowCaseBox {
 			
 			@Override
 			public void onClick(View v) {
-				mshowcaseView.hide();
+				mshowcaseView.dismiss();
 				mShowcaseCurrent++;
 				if ( mShowcaseCurrent < mShowcaseInfos.size() ) {
 					ShowcaseInfo info = mShowcaseInfos.get(mShowcaseCurrent);
