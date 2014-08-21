@@ -207,6 +207,10 @@ class TextDrawer {
 	}
 
     public float[] getBestTextPosition() {
+    	// Prevent negative values
+    	for ( int i=0;i<mBestTextPosition.length;i++ ) {
+    		mBestTextPosition[i] = mBestTextPosition[i] < 0 ? 0 : mBestTextPosition[i];
+    	}
         return mBestTextPosition;
     }
 

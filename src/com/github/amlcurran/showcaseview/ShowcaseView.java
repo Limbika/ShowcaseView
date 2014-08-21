@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -147,7 +148,7 @@ public class ShowcaseView extends RelativeLayout
                     Point targetPoint = target.getPoint();
                     if (targetPoint != null) {
                         hasNoTarget = false;
-                        if (animate) {
+                        if ( animate && (Build.VERSION.SDK_INT > 10) ) {
                             animationFactory.animateTargetToPoint(ShowcaseView.this, targetPoint);
                         } else {
                             setShowcasePosition(targetPoint);
