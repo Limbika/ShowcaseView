@@ -9,14 +9,14 @@ import android.view.View.OnClickListener;
 /**
  * Box of ShowCaseViews.
  */
-public class ShowCaseBox {
+public class ShowcaseBox {
 	
 	private Activity mActivity;
 	private ArrayList<ShowcaseInfo> mShowcaseInfos = new ArrayList<ShowcaseInfo>();
-	private ShowcaseView mshowcaseView;
+	private ShowcaseView mShowCaseView;
 	private int mShowcaseCurrent;
 	
-	public ShowCaseBox(Activity activity) {
+	public ShowcaseBox(Activity activity) {
 		mActivity = activity;
 	}
 	
@@ -26,9 +26,13 @@ public class ShowCaseBox {
 	 * @param title The title resource. If is 0, without title. 
 	 * @param description The description resource. If is 0, without description. 
 	 * @param image The drawable resource. If is 0, without image.
+	 * @param touchMode. The touch mode behaviour. Use:
+	 *  - ShowcaseView.TOUCH_ALL You can click in all screen.
+	 *  - ShowcaseView.TOUCH_TARGET You can click only in target view.
+	 *  - ShowcaseView.TOUCH_NONE You cannot click on the screen.
 	 */
-	public void addShowCase(View target, int title, int description, int image) {
-		ShowcaseInfo info = new ShowcaseInfo(target, title, description, image);
+	public void addShowCase(View target, int title, int description, int image, int touchMode) {
+		ShowcaseInfo info = new ShowcaseInfo(target, title, description, image, touchMode);
 		mShowcaseInfos.add(info);
 	}
 	
@@ -38,9 +42,13 @@ public class ShowCaseBox {
 	 * @param title The title resource. If is 0, without title. 
 	 * @param description The description resource. If is 0, without description. 
 	 * @param image The drawable resource. If is 0, without image.
+	 *  * @param touchMode. The touch mode behaviour. Use:
+	 *  - ShowcaseView.TOUCH_ALL You can click in all screen.
+	 *  - ShowcaseView.TOUCH_TARGET You can click only in target view.
+	 *  - ShowcaseView.TOUCH_NONE You cannot click on the screen.
 	 */
-	public void addShowCase(int target, int title, int description, int image) {
-		ShowcaseInfo info = new ShowcaseInfo(target, title, description, image);
+	public void addShowCase(int target, int title, int description, int image, int touchMode) {
+		ShowcaseInfo info = new ShowcaseInfo(target, title, description, image, touchMode);
 		mShowcaseInfos.add(info);
 	}
 	
@@ -57,10 +65,18 @@ public class ShowCaseBox {
 	 */
 	public void show(boolean sigleShot) {
 		if ( mShowcaseInfos.size() > 0 ) {
+			
 			mShowcaseCurrent = 0;
 			ShowcaseInfo info = mShowcaseInfos.get(mShowcaseCurrent);
 			showShowcase(info, sigleShot);
 		}
+	}
+	/**
+	 * Know if the ShowCaseView are showing information on the screen or not.
+	 * @return True if yes, False is not.
+	 */
+	public boolean viewIsShown(){
+		return mShowCaseView.isShown();
 	}
 	
 	private void showShowcase(ShowcaseInfo info, final boolean singleShot) {
@@ -72,7 +88,7 @@ public class ShowCaseBox {
 			
 			@Override
 			public void onClick(View v) {
-				mshowcaseView.dismiss();
+				mShowCaseView.dismiss();
 				mShowcaseCurrent++;
 				if ( mShowcaseCurrent < mShowcaseInfos.size() ) {
 					ShowcaseInfo info = mShowcaseInfos.get(mShowcaseCurrent);
@@ -80,8 +96,9 @@ public class ShowCaseBox {
 				}
 			}
 		});
-		mshowcaseView = builder.build();
-		mshowcaseView.show();
+		mShowCaseView = builder.build();
+		mShowCaseView.show();
 	}
+	
 
 }

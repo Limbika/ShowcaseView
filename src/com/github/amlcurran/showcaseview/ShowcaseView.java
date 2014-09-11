@@ -30,7 +30,12 @@ public class ShowcaseView extends RelativeLayout
         implements View.OnClickListener, View.OnTouchListener, ViewTreeObserver.OnPreDrawListener, ViewTreeObserver.OnGlobalLayoutListener {
 
     private static final int HOLO_BLUE = Color.parseColor("#33B5E5");
-
+    
+    //Touch modes.
+    public static final int TOUCH_ALL = 1;
+    public static final int TOUCH_TARGET = 2;
+    public static final int TOUCH_NONE = 3;
+    
     private final Button mEndButton;
     private final TextDrawer textDrawer;
     private final ShowcaseDrawer showcaseDrawer;
@@ -45,8 +50,8 @@ public class ShowcaseView extends RelativeLayout
 
     // Touch items
     private boolean hasCustomClickListener = false;
-    private boolean blockTouches = true;
-    private boolean hideOnTouch = false;
+    private boolean outsideTargetTouches;
+    private boolean targetTouches;
     private OnShowcaseEventListener mEventListener = OnShowcaseEventListener.NONE;
 
     private boolean hasAlteredText = false;
@@ -312,18 +317,15 @@ public class ShowcaseView extends RelativeLayout
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-
         float xDelta = Math.abs(motionEvent.getRawX() - showcaseX);
         float yDelta = Math.abs(motionEvent.getRawY() - showcaseY);
         double distanceFromFocus = Math.sqrt(Math.pow(xDelta, 2) + Math.pow(yDelta, 2));
 
-        if (MotionEvent.ACTION_UP == motionEvent.getAction() &&
-                hideOnTouch && distanceFromFocus > showcaseDrawer.getBlockedRadius()) {
-            this.hide();
+        if ( !targetTouches ) {
             return true;
         }
 
-        return blockTouches && distanceFromFocus > showcaseDrawer.getBlockedRadius();
+        return !outsideTargetTouches && distanceFromFocus > showcaseDrawer.getBlockedRadius();
     }
 
     private static void insertShowcaseView(ShowcaseView showcaseView, Activity activity) {
@@ -465,28 +467,17 @@ public class ShowcaseView extends RelativeLayout
             showcaseView.overrideButtonClick(onClickListener);
             return this;
         }
-
+        
         /**
-         * Don't make the ShowcaseView block touches on itself. This doesn't
-         * block touches in the showcased area.
-         * <p/>
-         * By default, the ShowcaseView does block touches
+         * The touch mode behaviour.
+         * @param mode
+		 *  - ShowcaseView.TOUCH_ALL You can click in all screen.
+		 *  - ShowcaseView.TOUCH_TARGET You can click only in target view.
+		 *  - ShowcaseView.TOUCH_NONE You cannot click on the screen.
          */
-        public Builder doNotBlockTouches() {
-            showcaseView.setBlocksTouches(false);
-            return this;
-        }
-
-        /**
-         * Make this ShowcaseView hide when the user touches outside the showcased area.
-         * This enables {@link #doNotBlockTouches()} as well.
-         * <p/>
-         * By default, the ShowcaseView doesn't hide on touch.
-         */
-        public Builder hideOnTouchOutside() {
-            showcaseView.setBlocksTouches(true);
-            showcaseView.setHideOnTouchOutside(true);
-            return this;
+        public Builder setTouchMode(int mode) {
+        	showcaseView.setTouchMode(mode);
+			return this;
         }
 
         /**
@@ -541,17 +532,33 @@ public class ShowcaseView extends RelativeLayout
     }
 
     /**
-     * @see com.github.amlcurran.showcaseview.ShowcaseView.Builder#hideOnTouchOutside()
+     * The touch mode behaviour.
+     * @param mode
+	 *  - ShowcaseView.TOUCH_ALL You can click in all screen.
+	 *  - ShowcaseView.TOUCH_TARGET You can click only in target view.
+	 *  - ShowcaseView.TOUCH_NONE You cannot click on the screen.
      */
-    public void setHideOnTouchOutside(boolean hideOnTouch) {
-        this.hideOnTouch = hideOnTouch;
-    }
-
-    /**
-     * @see com.github.amlcurran.showcaseview.ShowcaseView.Builder#doNotBlockTouches()
-     */
-    public void setBlocksTouches(boolean blockTouches) {
-        this.blockTouches = blockTouches;
+    public void setTouchMode (int mode) {
+    	switch (mode) {
+			case TOUCH_ALL:
+				this.targetTouches = true;
+				this.outsideTargetTouches = true;
+				break;
+				
+			case TOUCH_TARGET:
+				this.outsideTargetTouches = false;
+			    this.targetTouches = true;
+				break;
+				
+			case TOUCH_NONE:
+				this.outsideTargetTouches = false;
+			    this.targetTouches = false;
+				break;
+			default:
+				this.outsideTargetTouches = false;
+			    this.targetTouches = true;
+				break;
+		}
     }
 
     /**
