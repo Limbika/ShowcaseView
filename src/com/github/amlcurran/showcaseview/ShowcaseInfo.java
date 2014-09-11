@@ -46,9 +46,7 @@ public class ShowcaseInfo {
 		if ( mImage != 0 ) {
 			builder.setImage(mImage);
 		}
-		if ( mTouchMode != 0) {
-			builder.setTouchMode(mTouchMode);
-		}
+		builder.setTouchMode(mTouchMode);
 		return builder;
 	}
 	
