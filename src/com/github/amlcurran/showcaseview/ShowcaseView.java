@@ -63,11 +63,11 @@ public class ShowcaseView extends RelativeLayout
     private long fadeInMillis;
     private long fadeOutMillis;
 
-    protected ShowcaseView(Context context, boolean newStyle) {
-        this(context, null, R.styleable.CustomTheme_showcaseViewStyle, newStyle);
+    protected ShowcaseView(Context context, int touchMode) {
+        this(context, null, R.styleable.CustomTheme_showcaseViewStyle, touchMode);
     }
 
-    protected ShowcaseView(Context context, AttributeSet attrs, int defStyle, boolean newStyle) {
+    protected ShowcaseView(Context context, AttributeSet attrs, int defStyle, int touchMode) {
         super(context, attrs, defStyle);
 
         ApiUtils apiUtils = new ApiUtils();
@@ -87,12 +87,36 @@ public class ShowcaseView extends RelativeLayout
         // Set the default animation times
         fadeInMillis = getResources().getInteger(android.R.integer.config_mediumAnimTime);
         fadeOutMillis = getResources().getInteger(android.R.integer.config_mediumAnimTime);
+        
+        // Touch behaviour
+        switch (touchMode) {
+			case TOUCH_ALL:
+				this.targetTouches = true;
+				this.outsideTargetTouches = true;
+				break;
+				
+			case TOUCH_TARGET:
+				this.outsideTargetTouches = false;
+			    this.targetTouches = true;
+				break;
+				
+			case TOUCH_NONE:
+				this.outsideTargetTouches = false;
+			    this.targetTouches = false;
+				break;
+			default:
+				this.outsideTargetTouches = false;
+			    this.targetTouches = true;
+				break;
+		}
 
         mEndButton = (Button) LayoutInflater.from(context).inflate(R.layout.showcase_button, null);
-        if (newStyle) {
-            showcaseDrawer = new NewShowcaseDrawer(getResources());
-        } else {
-            showcaseDrawer = new StandardShowcaseDrawer(getResources());
+        
+        if ( touchMode == TOUCH_NONE ) {
+            showcaseDrawer = new NoTargetShowcaseDrawer(getResources());
+        }
+        else {
+            showcaseDrawer = new TargetShowcaseDrawer(getResources());
         }
         textDrawer = new TextDrawer(getResources(), showcaseAreaCalculator, getContext());
 
@@ -383,12 +407,12 @@ public class ShowcaseView extends RelativeLayout
         private final Activity activity;
 
         public Builder(Activity activity) {
-            this(activity, false);
+            this(activity, TOUCH_TARGET);
         }
 
-        public Builder(Activity activity, boolean useNewStyle) {
+        public Builder(Activity activity, int touchMode) {
             this.activity = activity;
-            this.showcaseView = new ShowcaseView(activity, useNewStyle);
+            this.showcaseView = new ShowcaseView(activity, touchMode);
             this.showcaseView.setTarget(Target.NONE);
         }
 
@@ -467,18 +491,6 @@ public class ShowcaseView extends RelativeLayout
             showcaseView.overrideButtonClick(onClickListener);
             return this;
         }
-        
-        /**
-         * The touch mode behaviour.
-         * @param mode
-		 *  - ShowcaseView.TOUCH_ALL You can click in all screen.
-		 *  - ShowcaseView.TOUCH_TARGET You can click only in target view.
-		 *  - ShowcaseView.TOUCH_NONE You cannot click on the screen.
-         */
-        public Builder setTouchMode(int mode) {
-        	showcaseView.setTouchMode(mode);
-			return this;
-        }
 
         /**
          * Set the ShowcaseView to only ever show once.
@@ -529,36 +541,6 @@ public class ShowcaseView extends RelativeLayout
     public void setFadeDurations(long fadeInMillis, long fadeOutMillis) {
         this.fadeInMillis = fadeInMillis;
         this.fadeOutMillis = fadeOutMillis;
-    }
-
-    /**
-     * The touch mode behaviour.
-     * @param mode
-	 *  - ShowcaseView.TOUCH_ALL You can click in all screen.
-	 *  - ShowcaseView.TOUCH_TARGET You can click only in target view.
-	 *  - ShowcaseView.TOUCH_NONE You cannot click on the screen.
-     */
-    public void setTouchMode (int mode) {
-    	switch (mode) {
-			case TOUCH_ALL:
-				this.targetTouches = true;
-				this.outsideTargetTouches = true;
-				break;
-				
-			case TOUCH_TARGET:
-				this.outsideTargetTouches = false;
-			    this.targetTouches = true;
-				break;
-				
-			case TOUCH_NONE:
-				this.outsideTargetTouches = false;
-			    this.targetTouches = false;
-				break;
-			default:
-				this.outsideTargetTouches = false;
-			    this.targetTouches = true;
-				break;
-		}
     }
 
     /**

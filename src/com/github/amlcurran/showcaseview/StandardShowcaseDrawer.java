@@ -11,7 +11,7 @@ import android.graphics.drawable.Drawable;
 /**
  * Created by curraa01 on 13/10/2013.
  */
-class StandardShowcaseDrawer implements ShowcaseDrawer {
+abstract class StandardShowcaseDrawer implements ShowcaseDrawer {
 
     protected final Paint eraserPaint;
     protected final Drawable showcaseDrawable;
@@ -28,8 +28,10 @@ class StandardShowcaseDrawer implements ShowcaseDrawer {
         eraserPaint.setAntiAlias(true);
         basicPaint = new Paint();
         showcaseRadius = resources.getDimension(R.dimen.showcase_radius);
-        showcaseDrawable = resources.getDrawable(R.drawable.cling_bleached);
+        showcaseDrawable = resources.getDrawable(getTargetDrawableResource());
     }
+    
+    protected abstract int getTargetDrawableResource();
 
     @Override
     public void setShowcaseCircleColor(int color) {
@@ -79,5 +81,4 @@ class StandardShowcaseDrawer implements ShowcaseDrawer {
     public void drawToCanvas(Canvas canvas, Bitmap bitmapBuffer) {
         canvas.drawBitmap(bitmapBuffer, 0, 0, basicPaint);
     }
-
 }

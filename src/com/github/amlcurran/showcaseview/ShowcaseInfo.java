@@ -28,7 +28,7 @@ public class ShowcaseInfo {
 	}
 	
 	public ShowcaseView.Builder build(Activity activity) {
-		ShowcaseView.Builder builder = new ShowcaseView.Builder(activity);
+		ShowcaseView.Builder builder = new ShowcaseView.Builder(activity, mTouchMode);
 		if ( mTargetView == null && mTarget != 0 ) {
 			ViewTarget viewTarget = new ViewTarget(mTarget, activity);
 			builder.setTarget(viewTarget);
@@ -46,7 +46,6 @@ public class ShowcaseInfo {
 		if ( mImage != 0 ) {
 			builder.setImage(mImage);
 		}
-		builder.setTouchMode(mTouchMode);
 		return builder;
 	}
 	

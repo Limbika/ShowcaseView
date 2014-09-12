@@ -42,7 +42,7 @@ public class ShowcaseBox {
 	 * @param title The title resource. If is 0, without title. 
 	 * @param description The description resource. If is 0, without description. 
 	 * @param image The drawable resource. If is 0, without image.
-	 *  * @param touchMode. The touch mode behaviour. Use:
+	 * @param touchMode. The touch mode behaviour. Use:
 	 *  - ShowcaseView.TOUCH_ALL You can click in all screen.
 	 *  - ShowcaseView.TOUCH_TARGET You can click only in target view.
 	 *  - ShowcaseView.TOUCH_NONE You cannot click on the screen.

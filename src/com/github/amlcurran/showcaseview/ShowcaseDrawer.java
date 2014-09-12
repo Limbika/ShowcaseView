@@ -9,7 +9,7 @@ import android.graphics.Canvas;
 interface ShowcaseDrawer {
 
     void setShowcaseCircleColor(int color);
-
+    
     void drawShowcase(Bitmap buffer, float x, float y, float scaleMultiplier);
 
     int getShowcaseWidth();
