@@ -3,6 +3,6 @@
 
     <color name="btn_normal">#FF33b5e5</color>
     <color name="btn_pressed">#3333b5e5</color>
-    <color name="background">#99FFFFFF</color>
+    <color name="background">#BFFFFFFF</color>
 
 </resources>

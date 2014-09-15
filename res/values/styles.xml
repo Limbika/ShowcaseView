@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="ShowcaseButton">
         <item name="android:layout_width">wrap_content</item>
@@ -25,11 +25,13 @@
         <item name="sv_buttonText">@android:string/ok</item>
     </style>
 
-    <style name="TextAppearance.ShowcaseView.Title" parent="android:style/TextAppearance.Large">
+    <style name="TextAppearance.ShowcaseView.Title" parent="android:style/TextAppearance">
+        <item name="android:textSize">25sp</item>
         <item name="android:textColor">@android:color/black</item>
     </style>
 
     <style name="TextAppearance.ShowcaseView.Detail" parent="android:style/TextAppearance">
+        <item name="android:textSize">20sp</item>
         <item name="android:textColor">@android:color/black</item>
     </style>
 

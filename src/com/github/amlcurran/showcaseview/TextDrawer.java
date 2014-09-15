@@ -33,7 +33,8 @@ class TextDrawer {
     private TextAppearanceSpan mTitleSpan;
     private TextAppearanceSpan mDetailSpan;
     private boolean hasRecalculated;
-    private Bitmap mBitmap;
+    private Bitmap mBitmapImage;
+    private Bitmap mBitmapIcon;
 
     public TextDrawer(Resources resources, ShowcaseAreaCalculator calculator, Context context) {
         padding = resources.getDimension(R.dimen.text_padding);
@@ -51,10 +52,18 @@ class TextDrawer {
 
     public void draw(Canvas canvas) {
         if (shouldDrawText()) {
-        	float offsetForTitle = 0;
+        	float offsetForIconWidth = 0;
+        	float offsetForTitleIConHeight = 0;
         	float offsetForDescription = 0;
             float[] textPosition = getBestTextPosition();
 
+            if ( mBitmapIcon != null ) {
+            	canvas.save();
+    	        canvas.drawColor(Color.TRANSPARENT);
+    	        canvas.drawBitmap(mBitmapIcon, textPosition[0],  textPosition[1], null);
+    	        canvas.restore();
+            }
+            
             if (!TextUtils.isEmpty(mTitle)) {
                 canvas.save();
                 if (hasRecalculated) {
@@ -62,8 +71,11 @@ class TextDrawer {
                             (int) textPosition[2], Layout.Alignment.ALIGN_NORMAL,
                             1.0f, 1.0f, true);
                 }
+                
+                //Multiply *2 for more space.
+                offsetForIconWidth = mBitmapIcon != null ? mBitmapIcon.getWidth()+ mBitmapIcon.getWidth()/3  : 0;
                 if (mDynamicTitleLayout != null) {
-                    canvas.translate(textPosition[0], textPosition[1]);
+                    canvas.translate(textPosition[0] + offsetForIconWidth, textPosition[1]);
                     mDynamicTitleLayout.draw(canvas);
                     canvas.restore();
                 }
@@ -77,18 +89,18 @@ class TextDrawer {
                             Layout.Alignment.ALIGN_NORMAL,
                             1.2f, 1.0f, true);
                 }
-                offsetForTitle = mDynamicTitleLayout != null ? mDynamicTitleLayout.getHeight() : 0;
+                offsetForTitleIConHeight = getoffsetForTitleIcon();
                 if (mDynamicDetailLayout != null) {
-                    canvas.translate(textPosition[0], textPosition[1] + offsetForTitle);
+                    canvas.translate(textPosition[0], textPosition[1] + offsetForTitleIConHeight);
                     mDynamicDetailLayout.draw(canvas);
                     canvas.restore();
                 }
             }
-            if (mBitmap != null) {
+            if (mBitmapImage != null) {
             	offsetForDescription = mDynamicDetailLayout != null ? mDynamicDetailLayout.getHeight() : 0;
     	        canvas.save();
     	        canvas.drawColor(Color.TRANSPARENT);
-    	        canvas.drawBitmap(mBitmap, textPosition[0],  textPosition[1] + offsetForTitle + offsetForDescription , null);
+    	        canvas.drawBitmap(mBitmapImage, textPosition[0],  textPosition[1] + offsetForTitleIConHeight + offsetForDescription , null);
     	        canvas.restore();
             }
         }
@@ -203,8 +215,12 @@ class TextDrawer {
     }
     
     public void setImage(int res) {
-		mBitmap = BitmapFactory.decodeResource(this.context.getResources(), res);
+		mBitmapImage = BitmapFactory.decodeResource(this.context.getResources(), res);
 	}
+    
+    public void setIcon(int res) {
+    	mBitmapIcon = BitmapFactory.decodeResource(this.context.getResources(), res);
+    }
 
     public float[] getBestTextPosition() {
     	// Prevent negative values
@@ -217,5 +233,22 @@ class TextDrawer {
     public boolean shouldDrawText() {
         return !TextUtils.isEmpty(mTitle) || !TextUtils.isEmpty(mDetails);
     }
-
+    
+    /**
+     * Get bigger offset between the icon and title. Both are in the same line. In case of not title and icon, will be 0.
+     * @return
+     */
+    private int getoffsetForTitleIcon() {
+    	if ( mBitmapIcon != null && mDynamicTitleLayout == null ) 
+    		return mBitmapIcon.getHeight() + mBitmapIcon.getHeight()/3;
+    	if ( mBitmapIcon == null && mDynamicTitleLayout != null ) 
+    		return mDynamicTitleLayout.getHeight() + mDynamicTitleLayout.getHeight()/3;
+    	if ( mBitmapIcon != null && mDynamicTitleLayout != null ) {
+    		if ( mBitmapIcon.getHeight() > mDynamicTitleLayout.getHeight() )
+    			return mBitmapIcon.getHeight() + mBitmapIcon.getHeight()/3;
+    		else 
+    			return mDynamicTitleLayout.getHeight() + mDynamicTitleLayout.getHeight()/3;
+    	}
+    	return 0;
+    }
 }

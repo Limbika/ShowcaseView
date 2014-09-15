@@ -385,6 +385,11 @@ public class ShowcaseView extends RelativeLayout
     public void setImage(int res) {
     	textDrawer.setImage(res);
 	}
+    
+	public void setIcon(int res) {
+		textDrawer.setIcon(res);
+		
+	}
 
     public void setScaleMultiplier(float scaleMultiplier) {
         this.scaleMultiplier = scaleMultiplier;
@@ -466,8 +471,19 @@ public class ShowcaseView extends RelativeLayout
             return this;
         }
         
+        /**
+         * Set a image below the description.
+         */
         public Builder setImage(int res) {
         	showcaseView.setImage(res);
+        	return this;
+        }
+        
+        /**
+         * Set a icon in beside the title. 
+         */
+        public Builder setIcon(int res) {
+        	showcaseView.setIcon(res);
         	return this;
         }
 

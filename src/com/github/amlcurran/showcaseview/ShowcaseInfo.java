@@ -12,18 +12,20 @@ public class ShowcaseInfo {
 	private CharSequence mTitle;
 	private CharSequence mDescription;
 	private int mImage;
+	private int mIcon;
 	private int mTouchMode;
 
-	public ShowcaseInfo(int target, CharSequence title, CharSequence description, int image, int touchMode) {
+	public ShowcaseInfo(int target, CharSequence title, int icon,  CharSequence description, int image, int touchMode) {
 		mTarget = target;
 		mTitle = title;
+		mIcon = icon;
 		mDescription = description;
 		mImage = image;
 		mTouchMode = touchMode;
 	}
 	
-	public ShowcaseInfo(View target, CharSequence title, CharSequence description, int image, int touchMode) { 
-		this(0, title, description, image, touchMode);
+	public ShowcaseInfo(View target, CharSequence title, int icon, CharSequence description, int image, int touchMode) { 
+		this(0, title, icon, description, image, touchMode);
 		mTargetView = target;
 	}
 	
@@ -45,6 +47,9 @@ public class ShowcaseInfo {
 		}
 		if ( mImage != 0 ) {
 			builder.setImage(mImage);
+		}
+		if ( mIcon != 0 ) {
+			builder.setIcon(mIcon);
 		}
 		return builder;
 	}
