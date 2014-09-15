@@ -194,6 +194,14 @@ public class ShowcaseView extends RelativeLayout
 
     private void updateBitmap() {
         if (bitmapBuffer == null || haveBoundsChanged()) {
+        	
+        	//FIXME TESTING @link https://github.com/amlcurran/ShowcaseView/issues/183
+        	//				@link https://github.com/tato469/ShowcaseView/commit/085e8cbc52800c67ae46cb7623d052fbb4eedcfd
+        	if ( bitmapBuffer != null ) {
+        		bitmapBuffer.recycle();
+        	}
+        	// END TESTING.
+        	
         	bitmapBuffer = Bitmap.createBitmap(getMeasuredWidth(), getMeasuredHeight(), Bitmap.Config.ARGB_8888);
         }
     }
