@@ -21,6 +21,13 @@ public class ShowcaseBox {
 	}
 	
 	/**
+	 * Clear the showcase box.
+	 */
+	public void clear() {
+		mShowcaseInfos.clear();
+	}
+	
+	/**
 	 * Add new showcase.
 	 * @param target The target view to focus. If is null, focus nothing.
 	 * @param title The title resource. If is 0, without title. 
@@ -162,6 +169,7 @@ public class ShowcaseBox {
 				mShowcaseCurrent++;
 				if ( mShowcaseCurrent < mShowcaseInfos.size() ) {
 					ShowcaseInfo info = mShowcaseInfos.get(mShowcaseCurrent);
+					mShowcaseInfos.set(mShowcaseCurrent, null);
 					showShowcase(info, singleShot);
 				}
 			}
