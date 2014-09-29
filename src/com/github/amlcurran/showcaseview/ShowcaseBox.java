@@ -153,7 +153,7 @@ public class ShowcaseBox {
 	 * Know if the ShowCaseView are showing information on the screen or not.
 	 * @return True if yes, False is not.
 	 */
-	public boolean viewIsShown(){
+	public boolean isShown(){
 		return mShowCaseView.isShown();
 	}
 	
