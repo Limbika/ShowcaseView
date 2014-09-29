@@ -148,6 +148,7 @@ public class ShowcaseBox {
 			showShowcase(info, sigleShot);
 		}
 	}
+	
 	/**
 	 * Know if the ShowCaseView are showing information on the screen or not.
 	 * @return True if yes, False is not.
@@ -166,6 +167,8 @@ public class ShowcaseBox {
 			@Override
 			public void onClick(View v) {
 				mShowCaseView.dismiss();
+				mShowCaseView = null;
+				
 				mShowcaseCurrent++;
 				if ( mShowcaseCurrent < mShowcaseInfos.size() ) {
 					ShowcaseInfo info = mShowcaseInfos.get(mShowcaseCurrent);

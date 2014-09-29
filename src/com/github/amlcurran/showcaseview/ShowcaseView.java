@@ -121,7 +121,7 @@ public class ShowcaseView extends RelativeLayout
         textDrawer = new TextDrawer(getResources(), showcaseAreaCalculator, getContext());
 
         updateStyle(styled, false);
-
+        
         init();
     }
 
@@ -292,12 +292,23 @@ public class ShowcaseView extends RelativeLayout
         hide();
     }
 
+    @Deprecated
     public void hide() {
-        clearBitmap();
+    	recycle();
         // If the type is set to one-shot, store that it has shot
         shotStateStore.storeShot();
         mEventListener.onShowcaseViewHide(this);
         fadeOutShowcase();
+    }
+    
+    public void recycle() {
+    	clearBitmap();
+    	textDrawer.recycle();
+    	
+    	getViewTreeObserver().removeOnPreDrawListener(this);
+    	getViewTreeObserver().removeGlobalOnLayoutListener(this);
+    	
+    	setOnTouchListener(null);
     }
 
     private void clearBitmap() {
@@ -323,7 +334,7 @@ public class ShowcaseView extends RelativeLayout
     }
     
     public void dismiss() {
-    	clearBitmap();
+    	recycle();
     	// If the type is set to one-shot, store that it has shot
     	shotStateStore.storeShot();
     	Activity activity = (Activity) getContext();

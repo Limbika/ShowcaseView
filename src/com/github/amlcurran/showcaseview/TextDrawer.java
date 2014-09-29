@@ -234,6 +234,17 @@ class TextDrawer {
         return !TextUtils.isEmpty(mTitle) || !TextUtils.isEmpty(mDetails);
     }
     
+    public void recycle() {
+    	if ( mBitmapIcon != null ) {
+    		mBitmapIcon.recycle();
+    		mBitmapIcon = null;
+    	}
+    	if ( mBitmapImage != null ) {
+    		mBitmapImage.recycle();
+    		mBitmapImage = null;
+    	}
+    }
+    
     /**
      * Get bigger offset between the icon and title. Both are in the same line. In case of not title and icon, will be 0.
      * @return
