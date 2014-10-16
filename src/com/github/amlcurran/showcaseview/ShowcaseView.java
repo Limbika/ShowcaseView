@@ -104,6 +104,7 @@ public class ShowcaseView extends RelativeLayout
 				this.outsideTargetTouches = false;
 			    this.targetTouches = false;
 				break;
+				
 			default:
 				this.outsideTargetTouches = false;
 			    this.targetTouches = true;
@@ -114,9 +115,11 @@ public class ShowcaseView extends RelativeLayout
         
         if ( touchMode == TOUCH_NONE ) {
             showcaseDrawer = new NoTargetShowcaseDrawer(getResources());
+            mEndButton.setVisibility(VISIBLE);
         }
         else {
             showcaseDrawer = new TargetShowcaseDrawer(getResources());
+            mEndButton.setVisibility(GONE);
         }
         textDrawer = new TextDrawer(getResources(), showcaseAreaCalculator, getContext());
 
@@ -358,11 +361,18 @@ public class ShowcaseView extends RelativeLayout
         float yDelta = Math.abs(motionEvent.getRawY() - showcaseY);
         double distanceFromFocus = Math.sqrt(Math.pow(xDelta, 2) + Math.pow(yDelta, 2));
 
+        //  No touch allowed
         if ( !targetTouches ) {
             return true;
         }
-
-        return !outsideTargetTouches && distanceFromFocus > showcaseDrawer.getBlockedRadius();
+        
+        // Touch in target allowed and touched in it. 
+        else if (!outsideTargetTouches && distanceFromFocus < showcaseDrawer.getBlockedRadius()){
+        	return !mEndButton.performClick();
+        }
+        
+        // Touch free
+        return true;
     }
 
     private static void insertShowcaseView(ShowcaseView showcaseView, Activity activity) {
