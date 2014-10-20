@@ -14,20 +14,38 @@ public class ShotStateStore {
 
     private final Context context;
 
-    public ShotStateStore(Context context) {
+    ShotStateStore(Context context) {
         this.context = context;
+    }
+    
+    /**
+     * Clean the shared prefrerences.
+     */
+    public void clean() {
+    	SharedPreferences internal = context.getSharedPreferences(PREFS_SHOWCASE_INTERNAL, Context.MODE_PRIVATE);
+    	internal.edit().clear().commit();
+    }
+    
+    /**
+     * Set the showcasase as finished.
+     */
+    public void setFinished() {
+    	SharedPreferences internal = context.getSharedPreferences(PREFS_SHOWCASE_INTERNAL, Context.MODE_PRIVATE);
+    	internal.edit().putBoolean(KEY_FINISHED, true);
     }
 
     boolean hasShot() {
-        return isSingleShot() && 
-        	   isFinished() && 
-        	   context
-                .getSharedPreferences(PREFS_SHOWCASE_INTERNAL, Context.MODE_PRIVATE)
-                .getBoolean(KEY_SHOT + shotId, false);
+    	return isFinished() || (isSingleShot() && isShown());
     }
 
     boolean isSingleShot() {
         return shotId != INVALID_SHOT_ID;
+    }
+    
+    boolean isShown() {
+    	return context
+    		.getSharedPreferences(PREFS_SHOWCASE_INTERNAL, Context.MODE_PRIVATE)
+    		.getBoolean(KEY_SHOT + shotId, false);
     }
 
     void storeShot() {
@@ -41,17 +59,7 @@ public class ShotStateStore {
         this.shotId = shotId;
     }
     
-    public void cleanSharedPrefs() {
-    	SharedPreferences internal = context.getSharedPreferences(PREFS_SHOWCASE_INTERNAL, Context.MODE_PRIVATE);
-    	internal.edit().clear().commit();
-    }
-    
-    public void setFinished() {
-    	SharedPreferences internal = context.getSharedPreferences(PREFS_SHOWCASE_INTERNAL, Context.MODE_PRIVATE);
-    	internal.edit().putBoolean(KEY_FINISHED, true);
-    }
-    
-    private boolean isFinished() {
+    boolean isFinished() {
     	return context.getSharedPreferences(PREFS_SHOWCASE_INTERNAL, Context.MODE_PRIVATE).getBoolean(KEY_FINISHED, false);
     }
 
