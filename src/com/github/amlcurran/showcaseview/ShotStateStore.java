@@ -27,7 +27,7 @@ public class ShotStateStore {
     }
     
     /**
-     * Set the showcasase as finished.
+     * Set all the showcasases as finished.
      */
     public void setFinished() {
     	SharedPreferences internal = context.getSharedPreferences(PREFS_SHOWCASE_INTERNAL, Context.MODE_PRIVATE);
