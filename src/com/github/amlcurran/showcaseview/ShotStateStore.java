@@ -14,7 +14,7 @@ public class ShotStateStore {
 
     private final Context context;
 
-    ShotStateStore(Context context) {
+    public ShotStateStore(Context context) {
         this.context = context;
     }
     
