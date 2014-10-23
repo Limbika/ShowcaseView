@@ -187,7 +187,7 @@ public class ShowcaseBox {
 	 * @return The new charsequence.
 	 */
 	private CharSequence resToCharSequence (int res) {
-		CharSequence newCharSequence = res == 0 ? "" : mActivity.getResources().getString(res);
+		CharSequence newCharSequence = res == -1 ? "" : mActivity.getResources().getString(res);
 		return newCharSequence;
 	}
 

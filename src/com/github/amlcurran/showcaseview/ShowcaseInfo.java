@@ -39,10 +39,10 @@ public class ShowcaseInfo {
 			ViewTarget viewTarget = new ViewTarget(mTargetView);
 			builder.setTarget(viewTarget);
 		}
-		if ( mTitle.length() != -1 ) {
+		if ( mTitle.length() != 0 ) {
 			builder.setContentTitle(mTitle);
 		}
-		if ( mDescription.length() != -1 ) {
+		if ( mDescription.length() != 0 ) {
 			builder.setContentText(mDescription);
 		}
 		if ( mImage != -1 ) {
