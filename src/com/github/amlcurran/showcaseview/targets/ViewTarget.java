@@ -9,18 +9,26 @@ import android.view.View;
  */
 public class ViewTarget implements Target {
 
-    private final View mView;
+    private View mView = null;
+    private int mResId;
+    private Activity mActivity;
 
     public ViewTarget(View view) {
         mView = view;
     }
 
     public ViewTarget(int viewId, Activity activity) {
-        mView = activity.findViewById(viewId);
+    	mResId = viewId;
+    	mActivity = activity;
     }
 
     @Override
     public Point getPoint() {
+    	if ( mView == null ) {
+    		mView = mActivity.findViewById(mResId);
+    		mActivity = null;
+    	}
+    	
         int[] location = new int[2];
         mView.getLocationInWindow(location);
         int x = location[0] + mView.getWidth() / 2;
