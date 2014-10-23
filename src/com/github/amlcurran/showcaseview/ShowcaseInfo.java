@@ -31,7 +31,7 @@ public class ShowcaseInfo {
 	
 	public ShowcaseView.Builder build(Activity activity) {
 		ShowcaseView.Builder builder = new ShowcaseView.Builder(activity, mTouchMode);
-		if ( mTargetView == null && mTarget != 0 ) {
+		if ( mTargetView == null && mTarget != -1 ) {
 			ViewTarget viewTarget = new ViewTarget(mTarget, activity);
 			builder.setTarget(viewTarget);
 		}
@@ -39,16 +39,16 @@ public class ShowcaseInfo {
 			ViewTarget viewTarget = new ViewTarget(mTargetView);
 			builder.setTarget(viewTarget);
 		}
-		if ( mTitle.length() != 0 ) {
+		if ( mTitle.length() != -1 ) {
 			builder.setContentTitle(mTitle);
 		}
-		if ( mDescription.length() != 0 ) {
+		if ( mDescription.length() != -1 ) {
 			builder.setContentText(mDescription);
 		}
-		if ( mImage != 0 ) {
+		if ( mImage != -1 ) {
 			builder.setImage(mImage);
 		}
-		if ( mIcon != 0 ) {
+		if ( mIcon != -1 ) {
 			builder.setIcon(mIcon);
 		}
 		return builder;
