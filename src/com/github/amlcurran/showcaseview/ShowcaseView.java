@@ -375,7 +375,7 @@ public class ShowcaseView extends RelativeLayout
         }
         
         // Touch free
-        return true;
+        return false;
     }
 
     private static void insertShowcaseView(ShowcaseView showcaseView, Activity activity) {
