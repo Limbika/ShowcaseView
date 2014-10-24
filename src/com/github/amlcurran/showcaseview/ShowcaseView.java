@@ -360,18 +360,19 @@ public class ShowcaseView extends RelativeLayout
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-//        float xDelta = Math.abs(motionEvent.getRawX() - showcaseX);
-//        float yDelta = Math.abs(motionEvent.getRawY() - showcaseY);
-//        double distanceFromFocus = Math.sqrt(Math.pow(xDelta, 2) + Math.pow(yDelta, 2));
-
         //  No touch allowed
         if ( !targetTouches ) {
             return true;
         }
         
         // Touch in target allowed and touched in it. 
-        else if ( !outsideTargetTouches && targetArea.contains((int) motionEvent.getRawX(), (int) motionEvent.getRawY()) ) {
-        	return !mEndButton.performClick();
+        else if ( !outsideTargetTouches ) {
+        	if ( targetArea.contains((int) motionEvent.getRawX(), (int) motionEvent.getRawY()) ) {
+        		return !mEndButton.performClick();
+        	}
+        	else {
+        		return true;
+        	}
         }
         
         // Touch free
