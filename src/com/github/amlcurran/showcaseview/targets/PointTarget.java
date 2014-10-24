@@ -1,6 +1,7 @@
 package com.github.amlcurran.showcaseview.targets;
 
 import android.graphics.Point;
+import android.graphics.Rect;
 
 /**
  * Showcase a specific x/y co-ordinate on the screen.
@@ -21,4 +22,10 @@ public class PointTarget implements Target {
     public Point getPoint() {
         return mPoint;
     }
+
+	@Override
+	public Rect getArea() {
+		return new Rect(mPoint.x, mPoint.y, mPoint.x, mPoint.y);
+	}
+
 }

@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -47,6 +48,7 @@ public class ShowcaseView extends RelativeLayout
     private int showcaseX = -1;
     private int showcaseY = -1;
     private float scaleMultiplier = 1f;
+    private Rect targetArea;
 
     // Touch items
     private boolean hasCustomClickListener = false;
@@ -177,6 +179,7 @@ public class ShowcaseView extends RelativeLayout
                 if (!shotStateStore.hasShot()) {
 
                     updateBitmap();
+                    targetArea = target.getArea();
                     Point targetPoint = target.getPoint();
                     if (targetPoint != null) {
                         hasNoTarget = false;
@@ -357,9 +360,9 @@ public class ShowcaseView extends RelativeLayout
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        float xDelta = Math.abs(motionEvent.getRawX() - showcaseX);
-        float yDelta = Math.abs(motionEvent.getRawY() - showcaseY);
-        double distanceFromFocus = Math.sqrt(Math.pow(xDelta, 2) + Math.pow(yDelta, 2));
+//        float xDelta = Math.abs(motionEvent.getRawX() - showcaseX);
+//        float yDelta = Math.abs(motionEvent.getRawY() - showcaseY);
+//        double distanceFromFocus = Math.sqrt(Math.pow(xDelta, 2) + Math.pow(yDelta, 2));
 
         //  No touch allowed
         if ( !targetTouches ) {
@@ -367,7 +370,7 @@ public class ShowcaseView extends RelativeLayout
         }
         
         // Touch in target allowed and touched in it. 
-        else if (!outsideTargetTouches && distanceFromFocus < showcaseDrawer.getBlockedRadius()){
+        else if ( !outsideTargetTouches && targetArea.contains((int) motionEvent.getRawX(), (int) motionEvent.getRawY()) ) {
         	return !mEndButton.performClick();
         }
         

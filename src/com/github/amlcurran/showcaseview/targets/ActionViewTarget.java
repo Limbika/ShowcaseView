@@ -2,6 +2,7 @@ package com.github.amlcurran.showcaseview.targets;
 
 import android.app.Activity;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.view.ViewParent;
 
 public class ActionViewTarget implements Target {
@@ -52,4 +53,12 @@ public class ActionViewTarget implements Target {
     public enum Type {
         SPINNER, HOME, TITLE, OVERFLOW
     }
+
+	@Override
+	public Rect getArea() {
+		int height = mActivity.getActionBar().getCustomView().getHeight();
+		int width = mActivity.getActionBar().getCustomView().getWidth();
+		return new Rect(0, 0, width, height);
+	}
+
 }
