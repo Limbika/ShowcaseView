@@ -158,6 +158,8 @@ public class ShowcaseBox {
 	}
 	
 	private void showShowcase(ShowcaseInfo info, final boolean singleShot) {
+		info.run();
+		
 		ShowcaseView.Builder builder = info.build(mActivity);
 		if ( singleShot ) {
 			builder.singleShot( mActivity.getClass().getName().hashCode() + mShowcaseCurrent );

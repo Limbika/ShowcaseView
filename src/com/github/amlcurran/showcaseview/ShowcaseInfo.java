@@ -14,14 +14,19 @@ public class ShowcaseInfo {
 	private int mImage;
 	private int mIcon;
 	private int mTouchMode;
+	private Runnable mRunnable = null;
 
-	public ShowcaseInfo(int target, CharSequence title, int icon,  CharSequence description, int image, int touchMode) {
+	public ShowcaseInfo(int target, CharSequence title, int icon,  CharSequence description, int image, int touchMode, Runnable runnable) {
 		mTarget = target;
 		mTitle = title;
 		mIcon = icon;
 		mDescription = description;
 		mImage = image;
 		mTouchMode = touchMode;
+		mRunnable = runnable;
+	}
+	public ShowcaseInfo(int target, CharSequence title, int icon,  CharSequence description, int image, int touchMode) {
+		this(target, title, icon, description, image, touchMode, null);
 	}
 	
 	public ShowcaseInfo(View target, CharSequence title, int icon, CharSequence description, int image, int touchMode) { 
@@ -52,6 +57,14 @@ public class ShowcaseInfo {
 			builder.setIcon(mIcon);
 		}
 		return builder;
+	}
+	
+	/**
+	 * Run the runnable if has it.
+	 */
+	public void run() {
+		if ( mRunnable != null ) mRunnable.run();
+		mRunnable = null;
 	}
 	
 }
