@@ -113,7 +113,7 @@ public class ShowcaseView extends RelativeLayout
 				break;
 		}
 
-        mEndButton = (Button) LayoutInflater.from(context).inflate(R.layout.showcase_button, this);
+        mEndButton = (Button) LayoutInflater.from(context).inflate(R.layout.showcase_button, null);
         
         if ( touchMode == TOUCH_NONE ) {
             showcaseDrawer = new NoTargetShowcaseDrawer(getResources());
