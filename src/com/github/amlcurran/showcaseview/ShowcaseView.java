@@ -179,10 +179,11 @@ public class ShowcaseView extends RelativeLayout
                 if (!shotStateStore.hasShot()) {
 
                     updateBitmap();
-                    targetArea = target.getArea();
                     Point targetPoint = target.getPoint();
                     if (targetPoint != null) {
                         hasNoTarget = false;
+                        targetArea = target.getArea();
+                        
                         if ( animate && (Build.VERSION.SDK_INT > 10) ) {
                             animationFactory.animateTargetToPoint(ShowcaseView.this, targetPoint);
                         } else {

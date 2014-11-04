@@ -26,6 +26,8 @@ public class ViewTarget implements Target {
     @Override
     public Point getPoint() {
     	View view = getView();
+    	if ( view == null ) return null;
+    	
         int[] location = new int[2];
         view.getLocationInWindow(location);
         int x = location[0] + view.getWidth() / 2;
