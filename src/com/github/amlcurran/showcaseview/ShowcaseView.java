@@ -196,7 +196,7 @@ public class ShowcaseView extends RelativeLayout
 
                 }
             }
-        }, 100);
+        }, 500);
     }
 
     private void updateBitmap() {
@@ -368,7 +368,7 @@ public class ShowcaseView extends RelativeLayout
         
         // Touch in target allowed and touched in it. 
         else if ( !outsideTargetTouches ) {
-        	if ( targetArea.contains((int) motionEvent.getRawX(), (int) motionEvent.getRawY()) ) {
+        	if ( targetArea != null && targetArea.contains((int) motionEvent.getRawX(), (int) motionEvent.getRawY()) ) {
         		return !mEndButton.performClick();
         	}
         	else {
