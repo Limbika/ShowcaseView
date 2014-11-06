@@ -312,8 +312,12 @@ public class ShowcaseView extends RelativeLayout
     	clearBitmap();
     	textDrawer.recycle();
     	
-    	getViewTreeObserver().removeOnPreDrawListener(this);
-    	getViewTreeObserver().removeGlobalOnLayoutListener(this);
+    	if ( Build.VERSION.SDK_INT >=16 ) {
+    		getViewTreeObserver().removeOnPreDrawListener(this);
+    	}
+    	else {
+    		getViewTreeObserver().removeGlobalOnLayoutListener(this);
+    	}
     	
     	setOnTouchListener(null);
     }
