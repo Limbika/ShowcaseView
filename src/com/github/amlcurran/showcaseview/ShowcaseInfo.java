@@ -5,7 +5,7 @@ import android.view.View;
 
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
-public class ShowcaseInfo {
+class ShowcaseInfo {
 	
 	private View mTargetView = null;
 	private int mTarget;
@@ -25,12 +25,9 @@ public class ShowcaseInfo {
 		mTouchMode = touchMode;
 		mRunnable = runnable;
 	}
-	public ShowcaseInfo(int target, CharSequence title, int icon,  CharSequence description, int image, int touchMode) {
-		this(target, title, icon, description, image, touchMode, null);
-	}
 	
-	public ShowcaseInfo(View target, CharSequence title, int icon, CharSequence description, int image, int touchMode) { 
-		this(0, title, icon, description, image, touchMode);
+	public ShowcaseInfo(View target, CharSequence title, int icon, CharSequence description, int image, int touchMode, Runnable runnable) { 
+		this(0, title, icon, description, image, touchMode, runnable);
 		mTargetView = target;
 	}
 	

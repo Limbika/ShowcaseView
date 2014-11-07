@@ -40,9 +40,10 @@ public class ShowcaseBox {
 	 *  <li>{@link ShowcaseView#TOUCH_TARGET}You can click only in target view.</li>
 	 *  <li>{@link ShowcaseView#TOUCH_NONE} You cannot click on the screen.</li>
 	 * </ul>
+	 * @param runnable The callback called when the showcase start.
 	 */
-	public void addShowCase(View target, int title, int icon, int description, int image, int touchMode) {
-		ShowcaseInfo info = new ShowcaseInfo(target, resToCharSequence(title), icon, resToCharSequence(description), image, touchMode);
+	public void addShowCase(View target, int title, int icon, int description, int image, int touchMode, Runnable runnable) {
+		ShowcaseInfo info = new ShowcaseInfo(target, resToCharSequence(title), icon, resToCharSequence(description), image, touchMode, runnable);
 		mShowcaseInfos.add(info);
 	}
 	
@@ -59,85 +60,10 @@ public class ShowcaseBox {
 	 *  <li>{@link ShowcaseView#TOUCH_TARGET}You can click only in target view.</li>
 	 *  <li>{@link ShowcaseView#TOUCH_NONE} You cannot click on the screen.</li>
 	 * </ul>
+	 * @param runnable The callback called when the showcase start.
 	 */
-	public void addShowCase(int target, int title, int icon, int description, int image, int touchMode) {
-		ShowcaseInfo info = new ShowcaseInfo(target, resToCharSequence(title), icon, resToCharSequence(description), image, touchMode);
-		mShowcaseInfos.add(info);
-	}
-	
-	/**
-	 * Add new showcase.
-	 * @param target The target view to focus. If is null, focus nothing.
-	 * @param title The title string. If is "", without title. 
-	 * @param icon The drawable resource. It will be beside the title. If is 0, without icon.
-	 * @param description The description resource. If is 0, without description. 
-	 * @param image The drawable resource. It will be below the description. If is 0, without image.
-	 * @param touchMode. The touch mode behaviour. Use:
-	 * <ul>
-	 *  <li>{@link ShowcaseView#TOUCH_ALL} You can click in all screen.</li>
-	 *  <li>{@link ShowcaseView#TOUCH_TARGET}You can click only in target view.</li>
-	 *  <li>{@link ShowcaseView#TOUCH_NONE} You cannot click on the screen.</li>
-	 * </ul>
-	 */
-	public void addShowCase(View target, CharSequence title, int icon, CharSequence description, int image, int touchMode) {
-		ShowcaseInfo info = new ShowcaseInfo(target, title, icon, description, image, touchMode);
-		mShowcaseInfos.add(info);
-	}
-	
-	/**
-	 * Add new showcase.
-	 * @param target The target view id to focus. If is 0, focus nothing.
-	 * @param title The title string. If is "", without title. 
-	 * @param icon The drawable resource. It will be beside the title. If is 0, without icon.
-	 * @param description The description resource. If is 0, without description. 
-	 * @param image The drawable resource. It will be below the description. If is 0, without image.
-	 * @param touchMode. The touch mode behaviour. Use:
-	 * <ul>
-	 *  <li>{@link ShowcaseView#TOUCH_ALL} You can click in all screen.
-	 *  <li>{@link ShowcaseView#TOUCH_TARGET}You can click only in target view.
-	 *  <li>{@link ShowcaseView#TOUCH_NONE} You cannot click on the screen.
-	 * </ul>
-	 */
-	public void addShowCase(int target, CharSequence title, int icon, CharSequence description, int image, int touchMode) {
-		ShowcaseInfo info = new ShowcaseInfo(target, title, icon, description, image, touchMode);
-		mShowcaseInfos.add(info);
-	}
-	
-	/**
-	 * Add new showcase.
-	 * @param target The target view to focus. If is null, focus nothing.
-	 * @param title The title resource. If is 0, without title. 
-	 * @param icon The drawable resource. It will be beside the title. If is 0, without icon.
-	 * @param description The description resource. If is 0, without description. 
-	 * @param image The drawable resource. It will be below the description. If is 0, without image.
-	 * @param touchMode. The touch mode behaviour. Use:
-	 * <ul>
-	 *  <li>{@link ShowcaseView#TOUCH_ALL} You can click in all screen.</li>
-	 *  <li>{@link ShowcaseView#TOUCH_TARGET}You can click only in target view.</li>
-	 *  <li>{@link ShowcaseView#TOUCH_NONE} You cannot click on the screen.</li>
-	 * </ul>
-	 */
-	public void addShowCase(View target, int title, int icon, CharSequence description, int image, int touchMode) {
-		ShowcaseInfo info = new ShowcaseInfo(target, resToCharSequence(title), icon, description, image, touchMode);
-		mShowcaseInfos.add(info);
-	}
-	
-	/**
-	 * Add new showcase.
-	 * @param target The target view id to focus. If is 0, focus nothing.
-	 * @param title The title resource. If is 0, without title. 
-	 * @param icon The drawable resource. It will be beside the title. If is 0, without icon.
-	 * @param description The description resource. If is 0, without description. 
-	 * @param image The drawable resource. It will be below the description. If is 0, without image.
-	 * @param touchMode. The touch mode behaviour. Use:
-	 * <ul>
-	 *  <li>{@link ShowcaseView#TOUCH_ALL} You can click in all screen.</li>
-	 *  <li>{@link ShowcaseView#TOUCH_TARGET}You can click only in target view.</li>
-	 *  <li>{@link ShowcaseView#TOUCH_NONE} You cannot click on the screen.</li>
-	 * </ul>
-	 */
-	public void addShowCase(int target, int title, int icon, CharSequence description, int image, int touchMode) {
-		ShowcaseInfo info = new ShowcaseInfo(target, resToCharSequence(title), icon, description, image, touchMode);
+	public void addShowCase(int target, int title, int icon, int description, int image, int touchMode, Runnable runnable) {
+		ShowcaseInfo info = new ShowcaseInfo(target, resToCharSequence(title), icon, resToCharSequence(description), image, touchMode, runnable);
 		mShowcaseInfos.add(info);
 	}
 	
