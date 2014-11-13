@@ -42,8 +42,8 @@ public class ShowcaseBox {
 	 * </ul>
 	 * @param runnable The callback called when the showcase start.
 	 */
-	public void addShowCase(View target, int title, int icon, int description, int image, int touchMode, Runnable runnable) {
-		ShowcaseInfo info = new ShowcaseInfo(target, resToCharSequence(title), icon, resToCharSequence(description), image, touchMode, runnable);
+	public void addShowCase(View target, CharSequence title, int icon, CharSequence description, int image, int touchMode, Runnable runnable) {
+		ShowcaseInfo info = new ShowcaseInfo(target, title, icon, description, image, touchMode, runnable);
 		mShowcaseInfos.add(info);
 	}
 	
@@ -62,8 +62,8 @@ public class ShowcaseBox {
 	 * </ul>
 	 * @param runnable The callback called when the showcase start.
 	 */
-	public void addShowCase(int target, int title, int icon, int description, int image, int touchMode, Runnable runnable) {
-		ShowcaseInfo info = new ShowcaseInfo(target, resToCharSequence(title), icon, resToCharSequence(description), image, touchMode, runnable);
+	public void addShowCase(int target, CharSequence title, int icon, CharSequence description, int image, int touchMode, Runnable runnable) {
+		ShowcaseInfo info = new ShowcaseInfo(target, title, icon, description, image, touchMode, runnable);
 		mShowcaseInfos.add(info);
 	}
 	
@@ -120,15 +120,4 @@ public class ShowcaseBox {
 		mShowCaseView = builder.build();
 		mShowCaseView.show();
 	}
-	
-	/**
-	 * Convert the resource to charsequence.
-	 * @param res The resource
-	 * @return The new charsequence.
-	 */
-	private CharSequence resToCharSequence (int res) {
-		CharSequence newCharSequence = res == -1 ? "" : mActivity.getResources().getString(res);
-		return newCharSequence;
-	}
-
 }
