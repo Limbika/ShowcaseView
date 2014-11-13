@@ -308,7 +308,8 @@ public class ShowcaseView extends RelativeLayout
         fadeOutShowcase();
     }
     
-    public void recycle() {
+    @SuppressWarnings("deprecation")
+	public void recycle() {
     	clearBitmap();
     	textDrawer.recycle();
     	
