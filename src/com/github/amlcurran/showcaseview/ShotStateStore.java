@@ -31,7 +31,7 @@ public class ShotStateStore {
      */
     public void setFinished() {
     	SharedPreferences internal = context.getSharedPreferences(PREFS_SHOWCASE_INTERNAL, Context.MODE_PRIVATE);
-    	internal.edit().putBoolean(KEY_FINISHED, true);
+    	internal.edit().putBoolean(KEY_FINISHED, true).apply();
     }
 
     boolean hasShot() {

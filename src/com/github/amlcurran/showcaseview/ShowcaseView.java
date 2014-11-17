@@ -31,6 +31,8 @@ public class ShowcaseView extends RelativeLayout
         implements View.OnClickListener, View.OnTouchListener, ViewTreeObserver.OnPreDrawListener, ViewTreeObserver.OnGlobalLayoutListener {
 
     private static final int HOLO_BLUE = Color.parseColor("#33B5E5");
+    public static final int BUTTON_RIGHT = 100;
+    public static final int BUTTON_LEFT = 101;
     
     //Touch modes.
     public static final int TOUCH_ALL = 1;
@@ -38,6 +40,7 @@ public class ShowcaseView extends RelativeLayout
     public static final int TOUCH_NONE = 3;
     
     private final Button mEndButton;
+    private final Button mFinalizeButton;
     private final TextDrawer textDrawer;
     private final ShowcaseDrawer showcaseDrawer;
     private final ShowcaseAreaCalculator showcaseAreaCalculator;
@@ -114,14 +117,20 @@ public class ShowcaseView extends RelativeLayout
 		}
 
         mEndButton = (Button) LayoutInflater.from(context).inflate(R.layout.showcase_button, null);
+        mFinalizeButton = (Button) LayoutInflater.from(context).inflate(R.layout.showcase_button, null);
+        
+        mEndButton.setId(BUTTON_RIGHT);
+        mFinalizeButton.setId(BUTTON_LEFT);
         
         if ( touchMode == TOUCH_NONE ) {
             showcaseDrawer = new NoTargetShowcaseDrawer(getResources());
             mEndButton.setVisibility(VISIBLE);
+            mFinalizeButton.setVisibility(VISIBLE);
         }
         else {
             showcaseDrawer = new TargetShowcaseDrawer(getResources());
             mEndButton.setVisibility(GONE);
+            mFinalizeButton.setVisibility(GONE);
         }
         textDrawer = new TextDrawer(getResources(), showcaseAreaCalculator, getContext());
 
@@ -134,19 +143,25 @@ public class ShowcaseView extends RelativeLayout
 
         setOnTouchListener(this);
 
-        if (mEndButton.getParent() == null) {
-            int margin = (int) getResources().getDimension(R.dimen.button_margin);
-            RelativeLayout.LayoutParams lps = (LayoutParams) generateDefaultLayoutParams();
-            lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-            lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            lps.setMargins(margin, margin, margin, margin);
-            mEndButton.setLayoutParams(lps);
-            mEndButton.setText(android.R.string.ok);
-            if (!hasCustomClickListener) {
-                mEndButton.setOnClickListener(this);
-            }
-            addView(mEndButton);
-        }
+		if (mEndButton.getParent() == null) {
+
+			mEndButton.setLayoutParams(getLayoutParams(RelativeLayout.ALIGN_PARENT_RIGHT));
+			mEndButton.setText(android.R.string.ok);
+			if (!hasCustomClickListener) {
+				mEndButton.setOnClickListener(this);
+			}
+			addView(mEndButton);
+		}
+
+		if (mFinalizeButton.getParent() == null) {
+
+			mFinalizeButton.setLayoutParams(getLayoutParams(RelativeLayout.ALIGN_PARENT_LEFT));
+			mFinalizeButton.setText(android.R.string.cancel);
+			if (!hasCustomClickListener) {
+				mFinalizeButton.setOnClickListener(this);
+			}
+			addView(mFinalizeButton);
+		}
     }
 
     private boolean hasShot() {
@@ -243,6 +258,9 @@ public class ShowcaseView extends RelativeLayout
         if (mEndButton != null) {
             mEndButton.setOnClickListener(listener != null ? listener : this);
         }
+        if (mFinalizeButton != null) {
+        	mFinalizeButton.setOnClickListener(listener != null ? listener : this);
+        }
         hasCustomClickListener = true;
     }
 
@@ -254,9 +272,15 @@ public class ShowcaseView extends RelativeLayout
         }
     }
 
-    public void setButtonText(CharSequence text) {
+    public void setRightButtonText(CharSequence text) {
         if (mEndButton != null) {
             mEndButton.setText(text);
+        }
+    }
+    
+    public void setLeftButtonText(CharSequence text) {
+        if (mFinalizeButton != null) {
+            mFinalizeButton.setText(text);
         }
     }
 
@@ -296,7 +320,7 @@ public class ShowcaseView extends RelativeLayout
 
     @Override
     public void onClick(View view) {
-        hide();
+   		hide();
     }
 
     @Deprecated
@@ -374,7 +398,7 @@ public class ShowcaseView extends RelativeLayout
         // Touch in target allowed and touched in it. 
         else if ( !outsideTargetTouches ) {
         	if ( targetArea != null && targetArea.contains((int) motionEvent.getRawX(), (int) motionEvent.getRawY()) ) {
-        		return !mEndButton.performClick();
+        		return !mEndButton.performClick() && !mFinalizeButton.performClick();
         	}
         	else {
         		return true;
@@ -429,10 +453,12 @@ public class ShowcaseView extends RelativeLayout
 
     public void hideButton() {
         mEndButton.setVisibility(GONE);
+        mFinalizeButton.setVisibility(GONE);
     }
 
     public void showButton() {
         mEndButton.setVisibility(VISIBLE);
+        mFinalizeButton.setVisibility(VISIBLE);
     }
 
     /**
@@ -620,6 +646,7 @@ public class ShowcaseView extends RelativeLayout
         showcaseDrawer.setBackgroundColour(backgroundColor);
         tintButton(showcaseColor, tintButton);
         mEndButton.setText(buttonText);
+        mFinalizeButton.setBackgroundColor(Color.RED);
         textDrawer.setTitleStyling(titleTextAppearance);
         textDrawer.setDetailStyling(detailTextAppearance);
         hasAlteredText = true;
@@ -635,6 +662,16 @@ public class ShowcaseView extends RelativeLayout
         } else {
             mEndButton.getBackground().setColorFilter(HOLO_BLUE, PorterDuff.Mode.MULTIPLY);
         }
+    }
+    
+    private RelativeLayout.LayoutParams getLayoutParams(int pos) {
+    	int margin = (int) getResources().getDimension(R.dimen.button_margin);
+        RelativeLayout.LayoutParams lps = (LayoutParams) generateDefaultLayoutParams();
+        lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        lps.addRule(pos);
+        lps.setMargins(margin, margin, margin, margin);
+		return lps;
+    	
     }
 
 }

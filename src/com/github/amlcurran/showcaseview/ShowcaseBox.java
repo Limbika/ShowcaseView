@@ -3,6 +3,7 @@ package com.github.amlcurran.showcaseview;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -15,9 +16,11 @@ public class ShowcaseBox {
 	private ArrayList<ShowcaseInfo> mShowcaseInfos = new ArrayList<ShowcaseInfo>();
 	private ShowcaseView mShowCaseView;
 	private int mShowcaseCurrent;
+	private ShotStateStore mShotStateStore;
 	
 	public ShowcaseBox(Activity activity) {
 		mActivity = activity;
+		mShotStateStore = new ShotStateStore(activity);
 	}
 	
 	/**
@@ -79,8 +82,7 @@ public class ShowcaseBox {
 	 * @param sigleShot True if is single shot showcase, false otherwise.
 	 */
 	public void show(boolean sigleShot) {
-		if ( mShowcaseInfos.size() > 0 ) {
-			
+		if ( mShowcaseInfos.size() > 0 && !mShotStateStore.isFinished() ) {
 			mShowcaseCurrent = 0;
 			ShowcaseInfo info = mShowcaseInfos.get(mShowcaseCurrent);
 			showShowcase(info, sigleShot);
@@ -106,14 +108,22 @@ public class ShowcaseBox {
 			
 			@Override
 			public void onClick(View v) {
-				mShowCaseView.dismiss();
-				mShowCaseView = null;
-				
-				mShowcaseCurrent++;
-				if ( mShowcaseCurrent < mShowcaseInfos.size() ) {
-					ShowcaseInfo info = mShowcaseInfos.get(mShowcaseCurrent);
-					mShowcaseInfos.set(mShowcaseCurrent, null);
-					showShowcase(info, singleShot);
+				if ( v.getId() == ShowcaseView.BUTTON_RIGHT )  {
+					mShowCaseView.dismiss();
+					mShowCaseView = null;
+					
+					mShowcaseCurrent++;
+					if ( mShowcaseCurrent < mShowcaseInfos.size() ) {
+						ShowcaseInfo info = mShowcaseInfos.get(mShowcaseCurrent);
+						mShowcaseInfos.set(mShowcaseCurrent, null);
+						showShowcase(info, singleShot);
+					}
+				}
+				else if ( v.getId() == ShowcaseView.BUTTON_LEFT ) {
+					Log.i("tag", "Finish!");
+					mShotStateStore.setFinished();
+					mShowCaseView.dismiss();
+					mShowCaseView = null;
 				}
 			}
 		});
