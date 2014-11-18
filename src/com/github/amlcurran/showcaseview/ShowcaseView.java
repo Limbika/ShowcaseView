@@ -68,11 +68,11 @@ public class ShowcaseView extends RelativeLayout
     private long fadeInMillis;
     private long fadeOutMillis;
 
-    protected ShowcaseView(Context context, int touchMode) {
-        this(context, null, R.styleable.CustomTheme_showcaseViewStyle, touchMode);
+    protected ShowcaseView(Context context, int touchMode, boolean finalize) {
+        this(context, null, R.styleable.CustomTheme_showcaseViewStyle, touchMode, finalize);
     }
 
-    protected ShowcaseView(Context context, AttributeSet attrs, int defStyle, int touchMode) {
+    protected ShowcaseView(Context context, AttributeSet attrs, int defStyle, int touchMode, boolean finalize) {
         super(context, attrs, defStyle);
 
         ApiUtils apiUtils = new ApiUtils();
@@ -125,13 +125,14 @@ public class ShowcaseView extends RelativeLayout
         if ( touchMode == TOUCH_NONE ) {
             showcaseDrawer = new NoTargetShowcaseDrawer(getResources());
             mEndButton.setVisibility(VISIBLE);
-            mFinalizeButton.setVisibility(VISIBLE);
         }
         else {
             showcaseDrawer = new TargetShowcaseDrawer(getResources());
             mEndButton.setVisibility(GONE);
-            mFinalizeButton.setVisibility(GONE);
         }
+        
+        mFinalizeButton.setVisibility(finalize ? VISIBLE : GONE);
+        
         textDrawer = new TextDrawer(getResources(), showcaseAreaCalculator, getContext());
 
         updateStyle(styled, false);
@@ -471,12 +472,12 @@ public class ShowcaseView extends RelativeLayout
         private final Activity activity;
 
         public Builder(Activity activity) {
-            this(activity, TOUCH_TARGET);
+            this(activity, TOUCH_TARGET, false);
         }
 
-        public Builder(Activity activity, int touchMode) {
+        public Builder(Activity activity, int touchMode, boolean finalizeButton) {
             this.activity = activity;
-            this.showcaseView = new ShowcaseView(activity, touchMode);
+            this.showcaseView = new ShowcaseView(activity, touchMode, finalizeButton);
             this.showcaseView.setTarget(Target.NONE);
         }
 
@@ -491,7 +492,7 @@ public class ShowcaseView extends RelativeLayout
         	}
             return showcaseView;
         }
-
+        
         /**
          * Set the title text shown on the ShowcaseView.
          */

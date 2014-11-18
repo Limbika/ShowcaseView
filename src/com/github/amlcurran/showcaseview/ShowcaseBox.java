@@ -44,9 +44,10 @@ public class ShowcaseBox {
 	 *  <li>{@link ShowcaseView#TOUCH_NONE} You cannot click on the screen.</li>
 	 * </ul>
 	 * @param runnable The callback called when the showcase start.
+	 * @param finishbutton True to show the button. False otherwise.
 	 */
-	public void addShowCase(View target, CharSequence title, int icon, CharSequence description, int image, int touchMode, Runnable runnable) {
-		ShowcaseInfo info = new ShowcaseInfo(target, title, icon, description, image, touchMode, runnable);
+	public void addShowCase(View target, CharSequence title, int icon, CharSequence description, int image, int touchMode, Runnable runnable, boolean finalize) {
+		ShowcaseInfo info = new ShowcaseInfo(target, title, icon, description, image, touchMode, runnable, finalize);
 		mShowcaseInfos.add(info);
 	}
 	
@@ -64,9 +65,11 @@ public class ShowcaseBox {
 	 *  <li>{@link ShowcaseView#TOUCH_NONE} You cannot click on the screen.</li>
 	 * </ul>
 	 * @param runnable The callback called when the showcase start.
+	 * @param finishbutton True to show the button. False otherwise.
 	 */
-	public void addShowCase(int target, CharSequence title, int icon, CharSequence description, int image, int touchMode, Runnable runnable) {
-		ShowcaseInfo info = new ShowcaseInfo(target, title, icon, description, image, touchMode, runnable);
+	public void addShowCase(int target, CharSequence title, int icon, CharSequence description, int image, int touchMode, Runnable runnable, boolean finalize) {
+		Log.i("ShowcaseBox", "Finalize: " +finalize);
+		ShowcaseInfo info = new ShowcaseInfo(target, title, icon, description, image, touchMode, runnable, finalize);
 		mShowcaseInfos.add(info);
 	}
 	
