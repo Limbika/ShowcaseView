@@ -12,6 +12,10 @@ import android.view.View.OnClickListener;
  */
 public class ShowcaseBox {
 	
+    public static final int TOUCH_ALL = 1;
+    public static final int TOUCH_TARGET = 2;
+    public static final int TOUCH_NONE = 3;
+	
 	private Activity mActivity;
 	private ArrayList<ShowcaseInfo> mShowcaseInfos = new ArrayList<ShowcaseInfo>();
 	private ShowcaseView mShowCaseView;
@@ -39,9 +43,9 @@ public class ShowcaseBox {
 	 * @param image The drawable resource. It will be below the description. If is -1, without image.
 	 * @param touchMode. The touch mode behaviour. Use:
 	 * <ul>
-	 * 	<li>{@link ShowcaseView#TOUCH_ALL} You can click in all screen.</li>
-	 *  <li>{@link ShowcaseView#TOUCH_TARGET}You can click only in target view.</li>
-	 *  <li>{@link ShowcaseView#TOUCH_NONE} You cannot click on the screen.</li>
+	 * 	<li>{@link #TOUCH_ALL} You can click in all screen.</li>
+	 *  <li>{@link #TOUCH_TARGET}You can click only in target view.</li>
+	 *  <li>{@link #TOUCH_NONE} You cannot click on the screen.</li>
 	 * </ul>
 	 * @param runnable The callback called when the showcase start.
 	 * @param finishbutton True to show the button. False otherwise.
@@ -60,9 +64,9 @@ public class ShowcaseBox {
 	 * @param image The drawable resource. It will be below the description. If is -1, without image.
 	 * @param touchMode. The touch mode behaviour. Use:
 	 * <ul>
-	 *  <li>{@link ShowcaseView#TOUCH_ALL} You can click in all screen.</li>
-	 *  <li>{@link ShowcaseView#TOUCH_TARGET}You can click only in target view.</li>
-	 *  <li>{@link ShowcaseView#TOUCH_NONE} You cannot click on the screen.</li>
+	 *  <li>{@link #TOUCH_ALL} You can click in all screen.</li>
+	 *  <li>{@link #TOUCH_TARGET}You can click only in target view.</li>
+	 *  <li>{@link #TOUCH_NONE} You cannot click on the screen.</li>
 	 * </ul>
 	 * @param runnable The callback called when the showcase start.
 	 * @param finishbutton True to show the button. False otherwise.
@@ -111,7 +115,7 @@ public class ShowcaseBox {
 			
 			@Override
 			public void onClick(View v) {
-				if ( v.getId() == ShowcaseView.BUTTON_RIGHT )  {
+				if ( v.getId() == R.id.btn_end )  {
 					mShowCaseView.dismiss();
 					mShowCaseView = null;
 					
@@ -122,7 +126,7 @@ public class ShowcaseBox {
 						showShowcase(info, singleShot);
 					}
 				}
-				else if ( v.getId() == ShowcaseView.BUTTON_LEFT ) {
+				else if ( v.getId() == R.id.btn_finalize ) {
 					Log.i("tag", "Finish!");
 					mShotStateStore.setFinished();
 					mShowCaseView.dismiss();

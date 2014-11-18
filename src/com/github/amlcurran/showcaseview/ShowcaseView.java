@@ -20,24 +20,15 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
-import com.github.amlcurran.showcaseview.AnimationFactory.AnimationEndListener;
 import com.github.amlcurran.showcaseview.AnimationFactory.AnimationStartListener;
-import com.github.amlcurran.showcaseview.targets.Target;
 
 /**
  * A view which allows you to showcase areas of your app with an explanation.
  */
-public class ShowcaseView extends RelativeLayout
-        implements View.OnClickListener, View.OnTouchListener, ViewTreeObserver.OnPreDrawListener, ViewTreeObserver.OnGlobalLayoutListener {
+class ShowcaseView extends RelativeLayout
+        implements View.OnTouchListener, ViewTreeObserver.OnPreDrawListener, ViewTreeObserver.OnGlobalLayoutListener {
 
     private static final int HOLO_BLUE = Color.parseColor("#33B5E5");
-    public static final int BUTTON_RIGHT = 100;
-    public static final int BUTTON_LEFT = 101;
-    
-    //Touch modes.
-    public static final int TOUCH_ALL = 1;
-    public static final int TOUCH_TARGET = 2;
-    public static final int TOUCH_NONE = 3;
     
     private final Button mEndButton;
     private final Button mFinalizeButton;
@@ -53,20 +44,13 @@ public class ShowcaseView extends RelativeLayout
     private float scaleMultiplier = 1f;
     private Rect targetArea;
 
-    // Touch items
-    private boolean hasCustomClickListener = false;
-    private boolean outsideTargetTouches;
-    private boolean targetTouches;
-    private OnShowcaseEventListener mEventListener = OnShowcaseEventListener.NONE;
+    // Touch mode
+    private int mTouchMode;
 
     private boolean hasAlteredText = false;
     private boolean hasNoTarget = false;
     private boolean shouldCentreText;
     private Bitmap bitmapBuffer;
-
-    // Animation items
-    private long fadeInMillis;
-    private long fadeOutMillis;
 
     protected ShowcaseView(Context context, int touchMode, boolean finalize) {
         this(context, null, R.styleable.CustomTheme_showcaseViewStyle, touchMode, finalize);
@@ -79,50 +63,36 @@ public class ShowcaseView extends RelativeLayout
         animationFactory = new AnimatorAnimationFactory();
         showcaseAreaCalculator = new ShowcaseAreaCalculator();
         shotStateStore = new ShotStateStore(context);
+        textDrawer = new TextDrawer(getResources(), showcaseAreaCalculator, getContext());
 
         apiUtils.setFitsSystemWindowsCompat(this);
         getViewTreeObserver().addOnPreDrawListener(this);
         getViewTreeObserver().addOnGlobalLayoutListener(this);
+        setOnTouchListener(this);
 
         // Get the attributes for the ShowcaseView
-        final TypedArray styled = context.getTheme()
-                .obtainStyledAttributes(attrs, R.styleable.ShowcaseView, R.attr.showcaseViewStyle,
-                        R.style.ShowcaseView);
+        final TypedArray styled = context.getTheme().obtainStyledAttributes(
+        		attrs, 
+        		R.styleable.ShowcaseView,
+        		R.attr.showcaseViewStyle,
+                R.style.ShowcaseView);
 
-        // Set the default animation times
-        fadeInMillis = getResources().getInteger(android.R.integer.config_mediumAnimTime);
-        fadeOutMillis = getResources().getInteger(android.R.integer.config_mediumAnimTime);
-        
         // Touch behaviour
-        switch (touchMode) {
-			case TOUCH_ALL:
-				this.targetTouches = true;
-				this.outsideTargetTouches = true;
-				break;
-				
-			case TOUCH_TARGET:
-				this.outsideTargetTouches = false;
-			    this.targetTouches = true;
-				break;
-				
-			case TOUCH_NONE:
-				this.outsideTargetTouches = false;
-			    this.targetTouches = false;
-				break;
-				
-			default:
-				this.outsideTargetTouches = false;
-			    this.targetTouches = true;
-				break;
-		}
+        mTouchMode = touchMode;
 
-        mEndButton = (Button) LayoutInflater.from(context).inflate(R.layout.showcase_button, null);
-        mFinalizeButton = (Button) LayoutInflater.from(context).inflate(R.layout.showcase_button, null);
+        // Buttons
+        LayoutInflater.from(context).inflate(R.layout.button_end, this);
+        mEndButton = (Button) findViewById(R.id.btn_end);
+        mEndButton.setLayoutParams(getLayoutParams(RelativeLayout.ALIGN_PARENT_RIGHT));
+		mEndButton.setText(android.R.string.ok);
         
-        mEndButton.setId(BUTTON_RIGHT);
-        mFinalizeButton.setId(BUTTON_LEFT);
+        LayoutInflater.from(context).inflate(R.layout.button_finalize, this);
+        mFinalizeButton = (Button) findViewById(R.id.btn_finalize);
+		mFinalizeButton.setLayoutParams(getLayoutParams(RelativeLayout.ALIGN_PARENT_LEFT));
+		mFinalizeButton.setText(android.R.string.cancel);
+		mFinalizeButton.setVisibility(finalize ? VISIBLE : GONE);
         
-        if ( touchMode == TOUCH_NONE ) {
+        if ( touchMode == ShowcaseBox.TOUCH_NONE ) {
             showcaseDrawer = new NoTargetShowcaseDrawer(getResources());
             mEndButton.setVisibility(VISIBLE);
         }
@@ -130,39 +100,9 @@ public class ShowcaseView extends RelativeLayout
             showcaseDrawer = new TargetShowcaseDrawer(getResources());
             mEndButton.setVisibility(GONE);
         }
-        
-        mFinalizeButton.setVisibility(finalize ? VISIBLE : GONE);
-        
-        textDrawer = new TextDrawer(getResources(), showcaseAreaCalculator, getContext());
 
+        // Style
         updateStyle(styled, false);
-        
-        init();
-    }
-
-    private void init() {
-
-        setOnTouchListener(this);
-
-		if (mEndButton.getParent() == null) {
-
-			mEndButton.setLayoutParams(getLayoutParams(RelativeLayout.ALIGN_PARENT_RIGHT));
-			mEndButton.setText(android.R.string.ok);
-			if (!hasCustomClickListener) {
-				mEndButton.setOnClickListener(this);
-			}
-			addView(mEndButton);
-		}
-
-		if (mFinalizeButton.getParent() == null) {
-
-			mFinalizeButton.setLayoutParams(getLayoutParams(RelativeLayout.ALIGN_PARENT_LEFT));
-			mFinalizeButton.setText(android.R.string.cancel);
-			if (!hasCustomClickListener) {
-				mFinalizeButton.setOnClickListener(this);
-			}
-			addView(mFinalizeButton);
-		}
     }
 
     private boolean hasShot() {
@@ -179,37 +119,40 @@ public class ShowcaseView extends RelativeLayout
         }
         showcaseX = x;
         showcaseY = y;
-        //init();
+        
         invalidate();
     }
 
     public void setTarget(final Target target) {
         setShowcase(target, true);
     }
-
+    
     public void setShowcase(final Target target, final boolean animate) {
         postDelayed(new Runnable() {
+        	
             @Override
             public void run() {
-
                 if (!shotStateStore.hasShot()) {
-
                     updateBitmap();
-                    Point targetPoint = target.getPoint();
-                    if (targetPoint != null) {
+                    
+                    if (target != null) {
+                    	Point targetPoint = target.getPoint();
                         hasNoTarget = false;
                         targetArea = target.getArea();
                         
                         if ( animate && (Build.VERSION.SDK_INT > 10) ) {
                             animationFactory.animateTargetToPoint(ShowcaseView.this, targetPoint);
-                        } else {
+                        } 
+                        else {
                             setShowcasePosition(targetPoint);
                         }
-                    } else {
+                    } 
+                    else {
+                    	showcaseX = 0;
+                    	showcaseY = 0;
                         hasNoTarget = true;
                         invalidate();
                     }
-
                 }
             }
         }, 500);
@@ -249,27 +192,14 @@ public class ShowcaseView extends RelativeLayout
 
     /**
      * Override the standard button click event
-     *
      * @param listener Listener to listen to on click events
      */
-    public void overrideButtonClick(OnClickListener listener) {
-        if (shotStateStore.hasShot()) {
-            return;
-        }
+    public void setButtonsOnClickListener(OnClickListener listener) {
         if (mEndButton != null) {
-            mEndButton.setOnClickListener(listener != null ? listener : this);
+            mEndButton.setOnClickListener(listener);
         }
         if (mFinalizeButton != null) {
-        	mFinalizeButton.setOnClickListener(listener != null ? listener : this);
-        }
-        hasCustomClickListener = true;
-    }
-
-    public void setOnShowcaseEventListener(OnShowcaseEventListener listener) {
-        if (listener != null) {
-            mEventListener = listener;
-        } else {
-            mEventListener = OnShowcaseEventListener.NONE;
+        	mFinalizeButton.setOnClickListener(listener);
         }
     }
 
@@ -309,36 +239,21 @@ public class ShowcaseView extends RelativeLayout
         // Draw the showcase drawable
         if (!hasNoTarget) {
             showcaseDrawer.drawShowcase(bitmapBuffer, showcaseX, showcaseY, scaleMultiplier);
-            showcaseDrawer.drawToCanvas(canvas, bitmapBuffer);
         }
+        showcaseDrawer.drawToCanvas(canvas, bitmapBuffer);
 
         // Draw the text on the screen, recalculating its position if necessary
         textDrawer.draw(canvas);
 
         super.dispatchDraw(canvas);
-
     }
 
-    @Override
-    public void onClick(View view) {
-   		hide();
-    }
-
-    @Deprecated
-    public void hide() {
-    	recycle();
-        // If the type is set to one-shot, store that it has shot
-        shotStateStore.storeShot();
-        mEventListener.onShowcaseViewHide(this);
-        fadeOutShowcase();
-    }
-    
     @SuppressWarnings("deprecation")
 	public void recycle() {
     	clearBitmap();
     	textDrawer.recycle();
     	
-    	if ( Build.VERSION.SDK_INT >=16 ) {
+    	if ( Build.VERSION.SDK_INT >= 16 ) {
     		getViewTreeObserver().removeOnPreDrawListener(this);
     	}
     	else {
@@ -355,49 +270,42 @@ public class ShowcaseView extends RelativeLayout
         }
     }
 
-    private void fadeOutShowcase() {
-        animationFactory.fadeOutView(this, fadeOutMillis, new AnimationEndListener() {
-            @Override
-            public void onAnimationEnd() {
-                setVisibility(View.GONE);
-                mEventListener.onShowcaseViewDidHide(ShowcaseView.this);
-            }
-        });
-    }
-
     public void show() {
-        mEventListener.onShowcaseViewShow(this);
         fadeInShowcase();
     }
     
     public void dismiss() {
     	recycle();
-    	// If the type is set to one-shot, store that it has shot
     	shotStateStore.storeShot();
-    	Activity activity = (Activity) getContext();
-        ((ViewGroup) activity.getWindow().getDecorView()).removeView(this);
+    	
+    	// Remove view
+    	final Activity activity = (Activity) getContext();
+    	((ViewGroup) activity.getWindow().getDecorView()).removeView(ShowcaseView.this);
     }
 
     private void fadeInShowcase() {
-        animationFactory.fadeInView(this, fadeInMillis,
-                new AnimationStartListener() {
-                    @Override
-                    public void onAnimationStart() {
-                        setVisibility(View.VISIBLE);
-                    }
+        animationFactory.fadeInView(
+    		this,
+    		getResources().getInteger(android.R.integer.config_mediumAnimTime),
+            new AnimationStartListener() {
+    			
+                @Override
+                public void onAnimationStart() {
+                    setVisibility(View.VISIBLE);
                 }
+            }
         );
     }
-
+    
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         //  No touch allowed
-        if ( !targetTouches ) {
+    	if ( mTouchMode == ShowcaseBox.TOUCH_NONE ) {
             return true;
         }
         
-        // Touch in target allowed and touched in it. 
-        else if ( !outsideTargetTouches ) {
+        // Touch in target allowed and touched in it.
+    	else if ( mTouchMode == ShowcaseBox.TOUCH_TARGET ) {
         	if ( targetArea != null && targetArea.contains((int) motionEvent.getRawX(), (int) motionEvent.getRawY()) ) {
         		return !mEndButton.performClick() && !mFinalizeButton.performClick();
         	}
@@ -472,13 +380,12 @@ public class ShowcaseView extends RelativeLayout
         private final Activity activity;
 
         public Builder(Activity activity) {
-            this(activity, TOUCH_TARGET, false);
+            this(activity, ShowcaseBox.TOUCH_TARGET, false);
         }
 
         public Builder(Activity activity, int touchMode, boolean finalizeButton) {
             this.activity = activity;
             this.showcaseView = new ShowcaseView(activity, touchMode, finalizeButton);
-            this.showcaseView.setTarget(Target.NONE);
         }
 
         /**
@@ -564,7 +471,7 @@ public class ShowcaseView extends RelativeLayout
          * Note that you will have to manually hide the ShowcaseView
          */
         public Builder setOnClickListener(OnClickListener onClickListener) {
-            showcaseView.overrideButtonClick(onClickListener);
+            showcaseView.setButtonsOnClickListener(onClickListener);
             return this;
         }
 
@@ -578,10 +485,13 @@ public class ShowcaseView extends RelativeLayout
             showcaseView.setSingleShot(shotId);
             return this;
         }
-
-        public Builder setShowcaseEventListener(OnShowcaseEventListener showcaseEventListener) {
-            showcaseView.setOnShowcaseEventListener(showcaseEventListener);
-            return this;
+        
+        /**
+         * No target showcase.
+         */
+        public Builder setNoTarget() {
+        	showcaseView.setTarget(null);
+        	return this;
         }
     }
 
@@ -609,14 +519,6 @@ public class ShowcaseView extends RelativeLayout
      */
     public void setButtonPosition(RelativeLayout.LayoutParams layoutParams) {
         mEndButton.setLayoutParams(layoutParams);
-    }
-
-    /**
-     * Set the duration of the fading in and fading out of the ShowcaseView
-     */
-    public void setFadeDurations(long fadeInMillis, long fadeOutMillis) {
-        this.fadeInMillis = fadeInMillis;
-        this.fadeOutMillis = fadeOutMillis;
     }
 
     /**

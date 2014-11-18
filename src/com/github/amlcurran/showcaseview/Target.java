@@ -1,4 +1,4 @@
-package com.github.amlcurran.showcaseview.targets;
+package com.github.amlcurran.showcaseview;
 
 import android.app.Activity;
 import android.graphics.Point;
@@ -8,22 +8,21 @@ import android.view.View;
 /**
  * Target a view on the screen. This will centre the target on the view.
  */
-public class ViewTarget implements Target {
-
+class Target {
+	
     private View mView = null;
     private int mResId;
     private Activity mActivity;
 
-    public ViewTarget(View view) {
+    public Target(View view) {
         mView = view;
     }
 
-    public ViewTarget(int viewId, Activity activity) {
+    public Target(int viewId, Activity activity) {
     	mResId = viewId;
     	mActivity = activity;
     }
 
-    @Override
     public Point getPoint() {
     	View view = getView();
     	if ( view == null ) return null;
@@ -35,7 +34,6 @@ public class ViewTarget implements Target {
         return new Point(x, y);
     }
 
-	@Override
 	public Rect getArea() {
 		View view = getView();
 		int[] location = new int[2];

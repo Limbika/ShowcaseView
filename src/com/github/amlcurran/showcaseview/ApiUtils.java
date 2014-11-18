@@ -4,7 +4,7 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.view.View;
 
-public class ApiUtils {
+class ApiUtils {
 
     public boolean isCompatWith(int versionCode) {
         return Build.VERSION.SDK_INT >= versionCode;

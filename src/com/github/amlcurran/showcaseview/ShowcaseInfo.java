@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.util.Log;
 import android.view.View;
 
-import com.github.amlcurran.showcaseview.targets.ViewTarget;
-
 class ShowcaseInfo {
 	
 	private View mTargetView = null;
@@ -38,12 +36,15 @@ class ShowcaseInfo {
 	public ShowcaseView.Builder build(Activity activity) {
 		ShowcaseView.Builder builder = new ShowcaseView.Builder(activity, mTouchMode, mFinalizeButton);
 		if ( mTargetView == null && mTarget != -1 ) {
-			ViewTarget viewTarget = new ViewTarget(mTarget, activity);
+			Target viewTarget = new Target(mTarget, activity);
 			builder.setTarget(viewTarget);
 		}
 		else if ( mTargetView != null ) {
-			ViewTarget viewTarget = new ViewTarget(mTargetView);
+			Target viewTarget = new Target(mTargetView);
 			builder.setTarget(viewTarget);
+		}
+		else {
+			builder.setNoTarget();
 		}
 		if ( mTitle.length() != 0 ) {
 			builder.setContentTitle(mTitle);

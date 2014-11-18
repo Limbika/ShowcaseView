@@ -2,7 +2,7 @@ package com.github.amlcurran.showcaseview;
 
 import android.content.res.Resources;
 
-public class TargetShowcaseDrawer extends StandardShowcaseDrawer {
+class TargetShowcaseDrawer extends StandardShowcaseDrawer {
 
 	public TargetShowcaseDrawer(Resources resources) {
 		super(resources);
