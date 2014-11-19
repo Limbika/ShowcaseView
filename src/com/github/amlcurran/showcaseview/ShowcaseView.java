@@ -89,7 +89,7 @@ class ShowcaseView extends RelativeLayout
         LayoutInflater.from(context).inflate(R.layout.button_finalize, this);
         mFinalizeButton = (Button) findViewById(R.id.btn_finalize);
 		mFinalizeButton.setLayoutParams(getLayoutParams(RelativeLayout.ALIGN_PARENT_LEFT));
-		mFinalizeButton.setText(android.R.string.cancel);
+		mFinalizeButton.setText(R.string.end);
 		mFinalizeButton.setVisibility(finalize ? VISIBLE : GONE);
         
         if ( touchMode == ShowcaseBox.TOUCH_NONE ) {
@@ -549,7 +549,7 @@ class ShowcaseView extends RelativeLayout
         showcaseDrawer.setBackgroundColour(backgroundColor);
         tintButton(showcaseColor, tintButton);
         mEndButton.setText(buttonText);
-        mFinalizeButton.setBackgroundColor(Color.RED);
+        mFinalizeButton.setBackgroundColor(R.color.red_finalize);
         textDrawer.setTitleStyling(titleTextAppearance);
         textDrawer.setDetailStyling(detailTextAppearance);
         hasAlteredText = true;

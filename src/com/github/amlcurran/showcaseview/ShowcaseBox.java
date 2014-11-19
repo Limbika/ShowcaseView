@@ -103,9 +103,11 @@ public class ShowcaseBox {
 		return mShowCaseView.isShown();
 	}
 	
-	private void showShowcase(ShowcaseInfo info, final boolean singleShot) {
-		info.run();
-		
+	public boolean isEmpty(){
+		return mShowcaseInfos.isEmpty();
+	}
+	
+	private void showShowcase(final ShowcaseInfo info, final boolean singleShot) {
 		ShowcaseView.Builder builder = info.build(mActivity);
 		if ( singleShot ) {
 			builder.singleShot( mActivity.getClass().getName().hashCode() + mShowcaseCurrent );
@@ -131,6 +133,7 @@ public class ShowcaseBox {
 					mShowCaseView.dismiss();
 					mShowCaseView = null;
 				}
+				info.run();
 			}
 		});
 		mShowCaseView = builder.build();
