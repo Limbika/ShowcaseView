@@ -72,7 +72,6 @@ public class ShowcaseBox {
 	 * @param finishbutton True to show the button. False otherwise.
 	 */
 	public void addShowCase(int target, CharSequence title, int icon, CharSequence description, int image, int touchMode, Runnable runnable, boolean finalize) {
-		Log.i("ShowcaseBox", "Finalize: " +finalize);
 		ShowcaseInfo info = new ShowcaseInfo(target, title, icon, description, image, touchMode, runnable, finalize);
 		mShowcaseInfos.add(info);
 	}

@@ -1,7 +1,6 @@
 package com.github.amlcurran.showcaseview;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.View;
 
 class ShowcaseInfo {
@@ -25,7 +24,6 @@ class ShowcaseInfo {
 		mTouchMode = touchMode;
 		mRunnable = runnable;
 		mFinalizeButton = finalize;
-		Log.i("ShowcaseInfo", "Finalize: " +finalize);
 	}
 	
 	public ShowcaseInfo(View target, CharSequence title, int icon, CharSequence description, int image, int touchMode, Runnable runnable, boolean finalize) { 
