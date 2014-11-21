@@ -35,6 +35,51 @@ public class ShowcaseBox {
 	}
 	
 	/**
+	 * Know if the ShowCaseView are showing information on the screen or not.
+	 * @return True if yes, false if not.
+	 */
+	public boolean isShown(){
+		return mShowCaseView.isShown();
+	}
+	
+	/**
+	 * Know if it has been added showcases.
+	 * @return True if yes, false if not.
+	 */
+	public boolean isEmpty(){
+		return mShowcaseInfos.isEmpty();
+	}
+	
+	/**
+	 * Don't show more showcases.
+	 */
+	public void finished() {
+		log("Finished");
+		
+		mShotStateStore.finished();
+		if (mShowCaseView != null) {
+			mShowCaseView.dismiss();
+			mShowcaseInfos.clear();
+			mShowCaseView = null;
+		}
+	}
+	
+	/**
+	 * Allow again to show showcases. 
+	 */
+	public void restore() {
+		mShotStateStore.restore();
+	}
+	
+	/**
+	 * Clean showcase sharedPrefs.
+	 */
+	public void clean() {
+		mShotStateStore.clean();
+		
+	}
+	
+	/**
 	 * Add new showcase.
 	 * @param target The target view to focus. If is null, focus nothing.
 	 * @param title The title resource. If is "", without title. 
@@ -88,26 +133,16 @@ public class ShowcaseBox {
 	 * @param sigleShot True if is single shot showcase, false otherwise.
 	 */
 	public void show(boolean sigleShot) {
-		if ( mShowcaseInfos.size() > 0 && !mShotStateStore.isFinished() ) {
+		log("show");
+		if ( mShowcaseInfos.size() > 0 ) {
 			mShowcaseCurrent = 0;
 			ShowcaseInfo info = mShowcaseInfos.get(mShowcaseCurrent);
 			showShowcase(info, sigleShot);
 		}
 	}
 	
-	/**
-	 * Know if the ShowCaseView are showing information on the screen or not.
-	 * @return True if yes, False is not.
-	 */
-	public boolean isShown(){
-		return mShowCaseView.isShown();
-	}
-	
-	public boolean isEmpty(){
-		return mShowcaseInfos.isEmpty();
-	}
-	
 	private void showShowcase(final ShowcaseInfo info, final boolean singleShot) {
+		log("showshowcase-- Info: " + info);
 		ShowcaseView.Builder builder = info.build(mActivity);
 		if ( singleShot ) {
 			builder.singleShot( mActivity.getClass().getName().hashCode() + mShowcaseCurrent );
@@ -116,10 +151,14 @@ public class ShowcaseBox {
 			
 			@Override
 			public void onClick(View v) {
+				log("click-- end =" + ( v.getId() == R.id.btn_end ) + ", ");
+				
+				mShowCaseView.dismiss();
+				mShowCaseView = null;
+				
+				info.run();
+				
 				if ( v.getId() == R.id.btn_end )  {
-					mShowCaseView.dismiss();
-					mShowCaseView = null;
-					
 					mShowcaseCurrent++;
 					if ( mShowcaseCurrent < mShowcaseInfos.size() ) {
 						ShowcaseInfo info = mShowcaseInfos.get(mShowcaseCurrent);
@@ -128,15 +167,22 @@ public class ShowcaseBox {
 					}
 				}
 				else if ( v.getId() == R.id.btn_finalize ) {
-					Log.i("tag", "Finish!");
-					mShotStateStore.setFinished();
-					mShowCaseView.dismiss();
-					mShowCaseView = null;
+					mShotStateStore.finished();
+					mShowcaseInfos.clear();
 				}
-				info.run();
 			}
 		});
-		mShowCaseView = builder.build();
-		mShowCaseView.show();
+		if ( !mShotStateStore.isFinished() ) {
+			mShowCaseView = builder.build();
+			mShowCaseView.show();
+		}
+	}
+	
+	private void log(String s) {
+		Log.d( "DEBUG", "-- " + s );
+		Log.d( "DEBUG", "Activity= " + mActivity.getClass().getSimpleName());
+		Log.d( "DEBUG", "mShowcaseInfos.size(): " + mShowcaseInfos.size() );
+		Log.d( "DEBUG", "mShotStateStore.isFinished(): " + mShotStateStore.isFinished() );
+		Log.d( "DEBUG", "mShowcaseCurrent: " + mShowcaseCurrent);
 	}
 }

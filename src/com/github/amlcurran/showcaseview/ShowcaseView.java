@@ -12,6 +12,7 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -299,6 +300,8 @@ class ShowcaseView extends RelativeLayout
     
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
+    	Log.d("SCV", "[TOUCH] " + getVisibility());
+    	
         //  No touch allowed
     	if ( mTouchMode == ShowcaseBox.TOUCH_NONE ) {
             return true;
@@ -307,7 +310,7 @@ class ShowcaseView extends RelativeLayout
         // Touch in target allowed and touched in it.
     	else if ( mTouchMode == ShowcaseBox.TOUCH_TARGET ) {
         	if ( targetArea != null && targetArea.contains((int) motionEvent.getRawX(), (int) motionEvent.getRawY()) ) {
-        		return !mEndButton.performClick() && !mFinalizeButton.performClick();
+        		return !mEndButton.performClick();
         	}
         	else {
         		return true;
@@ -319,6 +322,10 @@ class ShowcaseView extends RelativeLayout
     }
 
     private static void insertShowcaseView(ShowcaseView showcaseView, Activity activity) {
+    	Log.d("SCV", 
+    		"[ShowCaseView] activity=" + activity.getClass().getSimpleName() + 
+    		", showcaseView=" + showcaseView.textDrawer.getContentTitle());
+    	
         ((ViewGroup) activity.getWindow().getDecorView()).addView(showcaseView);
         if (!showcaseView.hasShot()) {
             showcaseView.show();

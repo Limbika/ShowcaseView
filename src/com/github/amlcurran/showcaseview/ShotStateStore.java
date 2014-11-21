@@ -29,9 +29,17 @@ public class ShotStateStore {
     /**
      * Set all the showcasases as finished.
      */
-    public void setFinished() {
+    public void finished() {
     	SharedPreferences internal = context.getSharedPreferences(PREFS_SHOWCASE_INTERNAL, Context.MODE_PRIVATE);
     	internal.edit().putBoolean(KEY_FINISHED, true).apply();
+    }
+    
+    /**
+     * Remove all the showcases as finished flag. 
+     */
+    public void restore() {
+    	SharedPreferences internal = context.getSharedPreferences(PREFS_SHOWCASE_INTERNAL, Context.MODE_PRIVATE);
+    	internal.edit().putBoolean(KEY_FINISHED, false).apply();
     }
 
     boolean hasShot() {

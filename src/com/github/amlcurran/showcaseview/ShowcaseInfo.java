@@ -67,4 +67,9 @@ class ShowcaseInfo {
 		mRunnable = null;
 	}
 	
+	@Override
+	public String toString() {
+		return mTitle.toString();
+	}
+	
 }
