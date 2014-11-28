@@ -3,7 +3,6 @@ package com.github.amlcurran.showcaseview;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -54,8 +53,6 @@ public class ShowcaseBox {
 	 * Don't show more showcases.
 	 */
 	public void finished() {
-		log("Finished");
-		
 		mShotStateStore.finished();
 		if (mShowCaseView != null) {
 			mShowCaseView.dismiss();
@@ -103,7 +100,7 @@ public class ShowcaseBox {
 	/**
 	 * Add new showcase.
 	 * @param target The target view id to focus. If is -1, focus nothing.
-	  * @param title The title resource. If is "", without title. 
+	 * @param title The title resource. If is "", without title. 
 	 * @param icon The drawable resource. It will be beside the title. If is -1, without icon.
 	 * @param description The description resource. If is "", without description. 
 	 * @param image The drawable resource. It will be below the description. If is -1, without image.
@@ -133,56 +130,59 @@ public class ShowcaseBox {
 	 * @param sigleShot True if is single shot showcase, false otherwise.
 	 */
 	public void show(boolean sigleShot) {
-		log("show");
 		if ( mShowcaseInfos.size() > 0 ) {
 			mShowcaseCurrent = 0;
-			ShowcaseInfo info = mShowcaseInfos.get(mShowcaseCurrent);
-			showShowcase(info, sigleShot);
+			showShowcase(sigleShot);
 		}
 	}
 	
-	private void showShowcase(final ShowcaseInfo info, final boolean singleShot) {
-		log("showshowcase-- Info: " + info);
-		ShowcaseView.Builder builder = info.build(mActivity);
+	private void showShowcase(final boolean singleShot) {
+		// The list is finished
+		if ( mShowcaseCurrent >= mShowcaseInfos.size() ) return;
+		
+		final ShowcaseInfo info = mShowcaseInfos.get(mShowcaseCurrent);
 		if ( singleShot ) {
-			builder.singleShot( mActivity.getClass().getName().hashCode() + mShowcaseCurrent );
+			mShotStateStore.setSingleShot(mActivity.getClass().getName().hashCode()+mShowcaseCurrent);
+			if ( !mShotStateStore.hasShot() ) {
+				showNext(singleShot);
+				return;
+			}
 		}
+		
+		ShowcaseView.Builder builder = info.build(mActivity);
 		builder.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				log("click-- end =" + ( v.getId() == R.id.btn_end ) + ", ");
-				
 				mShowCaseView.dismiss();
 				mShowCaseView = null;
 				
+				// Execute runnable
 				info.run();
 				
 				if ( v.getId() == R.id.btn_end )  {
-					mShowcaseCurrent++;
-					if ( mShowcaseCurrent < mShowcaseInfos.size() ) {
-						ShowcaseInfo info = mShowcaseInfos.get(mShowcaseCurrent);
-						mShowcaseInfos.set(mShowcaseCurrent, null);
-						showShowcase(info, singleShot);
-					}
+					showNext(singleShot);
 				}
 				else if ( v.getId() == R.id.btn_finalize ) {
 					mShotStateStore.finished();
 					mShowcaseInfos.clear();
 				}
+				
+				// Mark singleshot
+				if ( singleShot ) mShotStateStore.storeShot();
 			}
 		});
+		
 		if ( !mShotStateStore.isFinished() ) {
 			mShowCaseView = builder.build();
 			mShowCaseView.show();
 		}
 	}
 	
-	private void log(String s) {
-		Log.d( "DEBUG", "-- " + s );
-		Log.d( "DEBUG", "Activity= " + mActivity.getClass().getSimpleName());
-		Log.d( "DEBUG", "mShowcaseInfos.size(): " + mShowcaseInfos.size() );
-		Log.d( "DEBUG", "mShotStateStore.isFinished(): " + mShotStateStore.isFinished() );
-		Log.d( "DEBUG", "mShowcaseCurrent: " + mShowcaseCurrent);
+	private void showNext(boolean singleShot) {
+		mShowcaseInfos.set(mShowcaseCurrent, null);
+		mShowcaseCurrent++;
+		showShowcase(singleShot);
 	}
+	
 }

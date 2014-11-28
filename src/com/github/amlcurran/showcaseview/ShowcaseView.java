@@ -12,7 +12,6 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -37,7 +36,6 @@ class ShowcaseView extends RelativeLayout
     private final ShowcaseDrawer showcaseDrawer;
     private final ShowcaseAreaCalculator showcaseAreaCalculator;
     private final AnimationFactory animationFactory;
-    private final ShotStateStore shotStateStore;
 
     // Showcase metrics
     private int showcaseX = -1;
@@ -63,7 +61,6 @@ class ShowcaseView extends RelativeLayout
         ApiUtils apiUtils = new ApiUtils();
         animationFactory = new AnimatorAnimationFactory();
         showcaseAreaCalculator = new ShowcaseAreaCalculator();
-        shotStateStore = new ShotStateStore(context);
         textDrawer = new TextDrawer(getResources(), showcaseAreaCalculator, getContext());
 
         apiUtils.setFitsSystemWindowsCompat(this);
@@ -106,21 +103,13 @@ class ShowcaseView extends RelativeLayout
         updateStyle(styled, false);
     }
 
-    private boolean hasShot() {
-        return shotStateStore.hasShot();
-    }
-
     void setShowcasePosition(Point point) {
         setShowcasePosition(point.x, point.y);
     }
 
     void setShowcasePosition(int x, int y) {
-        if (shotStateStore.hasShot()) {
-            return;
-        }
         showcaseX = x;
         showcaseY = y;
-        
         invalidate();
     }
 
@@ -133,27 +122,25 @@ class ShowcaseView extends RelativeLayout
         	
             @Override
             public void run() {
-                if (!shotStateStore.hasShot()) {
-                    updateBitmap();
+                updateBitmap();
+                
+                if (target != null) {
+                	Point targetPoint = target.getPoint();
+                    hasNoTarget = false;
+                    targetArea = target.getArea();
                     
-                    if (target != null) {
-                    	Point targetPoint = target.getPoint();
-                        hasNoTarget = false;
-                        targetArea = target.getArea();
-                        
-                        if ( animate && (Build.VERSION.SDK_INT > 10) ) {
-                            animationFactory.animateTargetToPoint(ShowcaseView.this, targetPoint);
-                        } 
-                        else {
-                            setShowcasePosition(targetPoint);
-                        }
+                    if ( animate && (Build.VERSION.SDK_INT > 10) ) {
+                        animationFactory.animateTargetToPoint(ShowcaseView.this, targetPoint);
                     } 
                     else {
-                    	showcaseX = 0;
-                    	showcaseY = 0;
-                        hasNoTarget = true;
-                        invalidate();
+                        setShowcasePosition(targetPoint);
                     }
+                } 
+                else {
+                	showcaseX = 0;
+                	showcaseY = 0;
+                    hasNoTarget = true;
+                    invalidate();
                 }
             }
         }, 500);
@@ -229,7 +216,7 @@ class ShowcaseView extends RelativeLayout
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
-        if (showcaseX < 0 || showcaseY < 0 || shotStateStore.hasShot()) {
+        if ( showcaseX < 0 || showcaseY < 0 ) {
             super.dispatchDraw(canvas);
             return;
         }
@@ -277,7 +264,6 @@ class ShowcaseView extends RelativeLayout
     
     public void dismiss() {
     	recycle();
-    	shotStateStore.storeShot();
     	
     	// Remove view
     	final Activity activity = (Activity) getContext();
@@ -300,8 +286,6 @@ class ShowcaseView extends RelativeLayout
     
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-    	Log.d("SCV", "[TOUCH] " + getVisibility());
-    	
         //  No touch allowed
     	if ( mTouchMode == ShowcaseBox.TOUCH_NONE ) {
             return true;
@@ -322,20 +306,8 @@ class ShowcaseView extends RelativeLayout
     }
 
     private static void insertShowcaseView(ShowcaseView showcaseView, Activity activity) {
-    	Log.d("SCV", 
-    		"[ShowCaseView] activity=" + activity.getClass().getSimpleName() + 
-    		", showcaseView=" + showcaseView.textDrawer.getContentTitle());
-    	
         ((ViewGroup) activity.getWindow().getDecorView()).addView(showcaseView);
-        if (!showcaseView.hasShot()) {
-            showcaseView.show();
-        } else {
-            showcaseView.hideImmediate();
-        }
-    }
-
-    private void hideImmediate() {
-        setVisibility(GONE);
+        showcaseView.show();
     }
 
     public void setContentTitle(CharSequence title) {
@@ -362,9 +334,7 @@ class ShowcaseView extends RelativeLayout
 
     @Override
     public void onGlobalLayout() {
-        if (!shotStateStore.hasShot()) {
-            updateBitmap();
-        }
+        updateBitmap();
     }
 
     public void hideButton() {
@@ -401,9 +371,7 @@ class ShowcaseView extends RelativeLayout
          * @return the created ShowcaseView
          */
         public ShowcaseView build() {
-        	if ( !showcaseView.hasShot() ) {
-        		insertShowcaseView(showcaseView, activity);
-        	}
+       		insertShowcaseView(showcaseView, activity);
             return showcaseView;
         }
         
@@ -483,17 +451,6 @@ class ShowcaseView extends RelativeLayout
         }
 
         /**
-         * Set the ShowcaseView to only ever show once.
-         *
-         * @param shotId a unique identifier (<em>across the app</em>) to store
-         *               whether this ShowcaseView has been shown.
-         */
-        public Builder singleShot(long shotId) {
-            showcaseView.setSingleShot(shotId);
-            return this;
-        }
-        
-        /**
          * No target showcase.
          */
         public Builder setNoTarget() {
@@ -509,13 +466,6 @@ class ShowcaseView extends RelativeLayout
         this.shouldCentreText = shouldCentreText;
         hasAlteredText = true;
         invalidate();
-    }
-
-	/**
-     * @see com.github.amlcurran.showcaseview.ShowcaseView.Builder#setSingleShot(long)
-     */
-    private void setSingleShot(long shotId) {
-        shotStateStore.setSingleShot(shotId);
     }
 
     /**
@@ -556,7 +506,7 @@ class ShowcaseView extends RelativeLayout
         showcaseDrawer.setBackgroundColour(backgroundColor);
         tintButton(showcaseColor, tintButton);
         mEndButton.setText(buttonText);
-        mFinalizeButton.setBackgroundColor(R.color.red_finalize);
+        mFinalizeButton.setBackgroundResource(R.color.red_finalize);
         textDrawer.setTitleStyling(titleTextAppearance);
         textDrawer.setDetailStyling(detailTextAppearance);
         hasAlteredText = true;
