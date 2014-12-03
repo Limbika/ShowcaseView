@@ -143,7 +143,7 @@ public class ShowcaseBox {
 		final ShowcaseInfo info = mShowcaseInfos.get(mShowcaseCurrent);
 		if ( singleShot ) {
 			mShotStateStore.setSingleShot(mActivity.getClass().getName().hashCode()+mShowcaseCurrent);
-			if ( !mShotStateStore.hasShot() ) {
+			if ( mShotStateStore.hasShot() ) {
 				showNext(singleShot);
 				return;
 			}
