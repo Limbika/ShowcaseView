@@ -4,6 +4,6 @@
     <color name="btn_normal">#FF33b5e5</color>
     <color name="btn_pressed">#3333b5e5</color>
     <color name="background">#BFFFFFFF</color>
-    <color name="red_finalize">#CC0000</color>
+    <color name="gray_finalize">#939393</color>
 
 </resources>
