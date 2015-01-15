@@ -12,6 +12,7 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -29,6 +30,7 @@ class ShowcaseView extends RelativeLayout
         implements View.OnTouchListener, ViewTreeObserver.OnPreDrawListener, ViewTreeObserver.OnGlobalLayoutListener {
 
     private static final int HOLO_BLUE = Color.parseColor("#33B5E5");
+    private static final String TAG = "ShowCaseView";
     
     private final Button mEndButton;
     private final Button mFinalizeButton;
@@ -147,10 +149,16 @@ class ShowcaseView extends RelativeLayout
     }
 
     private void updateBitmap() {
-        if (bitmapBuffer == null || haveBoundsChanged()) {
-        	clearBitmap();
-        	bitmapBuffer = Bitmap.createBitmap(getMeasuredWidth(), getMeasuredHeight(), Bitmap.Config.ARGB_8888);
-        }
+    	try {
+    		if (bitmapBuffer == null || haveBoundsChanged()) {
+    			clearBitmap();
+    			bitmapBuffer = Bitmap.createBitmap(getMeasuredWidth(), getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+    		}
+    	} 
+    	catch (Exception e) {
+    		Log.e(TAG, e.getMessage());
+    		dismiss();
+    	}
     }
 
     private boolean haveBoundsChanged() {
@@ -241,8 +249,9 @@ class ShowcaseView extends RelativeLayout
     	clearBitmap();
     	textDrawer.recycle();
     	
+    	getViewTreeObserver().removeOnPreDrawListener(this);
     	if ( Build.VERSION.SDK_INT >= 16 ) {
-    		getViewTreeObserver().removeOnPreDrawListener(this);
+    		getViewTreeObserver().removeOnGlobalLayoutListener(this);
     	}
     	else {
     		getViewTreeObserver().removeGlobalOnLayoutListener(this);
@@ -487,7 +496,7 @@ class ShowcaseView extends RelativeLayout
     }
 
     private void updateStyle(TypedArray styled, boolean invalidate) {
-        int backgroundColor = styled.getColor(R.styleable.ShowcaseView_sv_backgroundColor, Color.argb(128, 80, 80, 80));
+        int backgroundColor = styled.getColor(R.styleable.ShowcaseView_sv_backgroundColor, Color.argb(230, 80, 80, 80));
         int showcaseColor = styled.getColor(R.styleable.ShowcaseView_sv_showcaseColor, HOLO_BLUE);
         String buttonText = styled.getString(R.styleable.ShowcaseView_sv_buttonText);
         if (TextUtils.isEmpty(buttonText)) {
@@ -506,7 +515,7 @@ class ShowcaseView extends RelativeLayout
         showcaseDrawer.setBackgroundColour(backgroundColor);
         tintButton(showcaseColor, tintButton);
         mEndButton.setText(buttonText);
-        mFinalizeButton.setBackgroundResource(R.color.red_finalize);
+        mFinalizeButton.setBackgroundResource(R.color.gray_finalize);
         textDrawer.setTitleStyling(titleTextAppearance);
         textDrawer.setDetailStyling(detailTextAppearance);
         hasAlteredText = true;

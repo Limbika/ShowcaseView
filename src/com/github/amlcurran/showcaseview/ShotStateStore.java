@@ -2,13 +2,14 @@ package com.github.amlcurran.showcaseview;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 public class ShotStateStore {
 
     private static final String PREFS_SHOWCASE_INTERNAL = ShotStateStore.class.getName();
     private static final String KEY_SHOT = "shot";
     private static final String KEY_FINISHED = "finished";
-    private static final int INVALID_SHOT_ID = -1;
+    private static final long INVALID_SHOT_ID = -1;
     
     long shotId = INVALID_SHOT_ID;
 

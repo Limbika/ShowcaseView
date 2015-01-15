@@ -3,6 +3,7 @@ package com.github.amlcurran.showcaseview;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -142,7 +143,8 @@ public class ShowcaseBox {
 		
 		final ShowcaseInfo info = mShowcaseInfos.get(mShowcaseCurrent);
 		if ( singleShot ) {
-			mShotStateStore.setSingleShot(mActivity.getClass().getName().hashCode()+mShowcaseCurrent);
+			long value = mActivity.getClass().getName().hashCode() + mShowcaseCurrent;
+			mShotStateStore.setSingleShot(value);
 			if ( mShotStateStore.hasShot() ) {
 				showNext(singleShot);
 				return;
@@ -154,6 +156,9 @@ public class ShowcaseBox {
 			
 			@Override
 			public void onClick(View v) {
+				// Mark singleshot
+				if ( singleShot ) mShotStateStore.storeShot();
+				
 				mShowCaseView.dismiss();
 				mShowCaseView = null;
 				
@@ -168,8 +173,6 @@ public class ShowcaseBox {
 					mShowcaseInfos.clear();
 				}
 				
-				// Mark singleshot
-				if ( singleShot ) mShotStateStore.storeShot();
 			}
 		});
 		
