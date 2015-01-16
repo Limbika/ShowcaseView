@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 public class ShotStateStore {
 
-    private static final String PREFS_SHOWCASE_INTERNAL = ShotStateStore.class.getName();
+    private static final String PREFS_SHOWCASE_INTERNAL = "com.limbika.piktoplus.showcaseview";
     private static final String KEY_SHOT = "shot";
     private static final String KEY_FINISHED = "finished";
     private static final long INVALID_SHOT_ID = -1;
@@ -70,5 +70,4 @@ public class ShotStateStore {
     boolean isFinished() {
     	return context.getSharedPreferences(PREFS_SHOWCASE_INTERNAL, Context.MODE_PRIVATE).getBoolean(KEY_FINISHED, false);
     }
-
 }
