@@ -38,7 +38,7 @@ public class ShowcaseBox {
 	 * @return True if yes, false if not.
 	 */
 	public boolean isShown(){
-		return mShowCaseView.isShown();
+		return mShowCaseView != null ? mShowCaseView.isShown() : false;
 	}
 	
 	/**
