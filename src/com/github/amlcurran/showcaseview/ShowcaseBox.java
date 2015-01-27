@@ -76,6 +76,12 @@ public class ShowcaseBox {
 		
 	}
 	
+	public boolean hasShot() {
+		long value = mActivity.getClass().getName().hashCode();
+		mShotStateStore.setSingleShot(value);
+		return mShotStateStore.hasShot();
+		}
+	
 	/**
 	 * Add new showcase.
 	 * @param target The target view to focus. If is null, focus nothing.
