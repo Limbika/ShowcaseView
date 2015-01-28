@@ -79,8 +79,8 @@ public class ShowcaseBox {
 	public boolean hasShot() {
 		long value = mActivity.getClass().getName().hashCode();
 		mShotStateStore.setSingleShot(value);
-		return mShotStateStore.hasShot();
-		}
+		return mShotStateStore.hasShot() && !mShotStateStore.isFinished();
+	}
 	
 	/**
 	 * Add new showcase.
