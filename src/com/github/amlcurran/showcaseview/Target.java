@@ -36,6 +36,8 @@ class Target {
 
 	public Rect getArea() {
 		View view = getView();
+		if ( view == null ) return null;
+		
 		int[] location = new int[2];
         view.getLocationInWindow(location);
 		
