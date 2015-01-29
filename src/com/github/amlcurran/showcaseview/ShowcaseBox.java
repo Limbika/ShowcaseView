@@ -76,10 +76,14 @@ public class ShowcaseBox {
 		
 	}
 	
+	/**
+	 * Check if the SCV must show.
+	 * @return
+	 */
 	public boolean hasShot() {
 		long value = mActivity.getClass().getName().hashCode();
 		mShotStateStore.setSingleShot(value);
-		return mShotStateStore.hasShot() && !mShotStateStore.isFinished();
+		return !mShotStateStore.hasShot();
 	}
 	
 	/**
