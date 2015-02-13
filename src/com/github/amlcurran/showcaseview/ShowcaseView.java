@@ -135,6 +135,7 @@ class ShowcaseView extends RelativeLayout implements View.OnTouchListener, ViewT
 					}
 				}
 				else {
+					mEndButton.setVisibility(VISIBLE);
 					showcaseX = 0;
 					showcaseY = 0;
 					hasNoTarget = true;
