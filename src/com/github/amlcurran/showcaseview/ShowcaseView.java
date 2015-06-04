@@ -7,10 +7,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.os.Build;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import com.github.amlcurran.showcaseview.AnimationFactory.AnimationStartListener;
@@ -29,11 +27,10 @@ import com.github.amlcurran.showcaseview.AnimationFactory.AnimationStartListener
 class ShowcaseView extends RelativeLayout implements View.OnTouchListener, ViewTreeObserver.OnPreDrawListener,
 		ViewTreeObserver.OnGlobalLayoutListener {
 
-	private static final int HOLO_BLUE = Color.parseColor("#33B5E5");
 	private static final String TAG = "ShowCaseView";
 
-	private final Button mEndButton;
-	private final Button mFinalizeButton;
+	private final ImageButton mTickFollowButton;
+	private final ImageButton mFinalizeXButton;
 	private final TextDrawer textDrawer;
 	private final ShowcaseDrawer showcaseDrawer;
 	private final ShowcaseAreaCalculator showcaseAreaCalculator;
@@ -78,24 +75,22 @@ class ShowcaseView extends RelativeLayout implements View.OnTouchListener, ViewT
 		mTouchMode = touchMode;
 
 		// Buttons
-		LayoutInflater.from(context).inflate(R.layout.button_end, this);
-		mEndButton = (Button) findViewById(R.id.btn_end);
-		mEndButton.setLayoutParams(getLayoutParams(RelativeLayout.ALIGN_PARENT_RIGHT));
-		mEndButton.setText(android.R.string.ok);
+		LayoutInflater.from(context).inflate(R.layout.button_tick_follow_layout, this);
+		mTickFollowButton = (ImageButton) findViewById(R.id.btn_tick_follow);
+		mTickFollowButton.setLayoutParams(getLayoutParams(RelativeLayout.ALIGN_PARENT_RIGHT));
 
-		LayoutInflater.from(context).inflate(R.layout.button_finalize, this);
-		mFinalizeButton = (Button) findViewById(R.id.btn_finalize);
-		mFinalizeButton.setLayoutParams(getLayoutParams(RelativeLayout.ALIGN_PARENT_LEFT));
-		mFinalizeButton.setText(R.string.end);
-		mFinalizeButton.setVisibility(finalize ? VISIBLE : GONE);
+		LayoutInflater.from(context).inflate(R.layout.button_finalize_x_layout, this);
+		mFinalizeXButton = (ImageButton) findViewById(R.id.btn_finalize_x);
+		mFinalizeXButton.setLayoutParams(getLayoutParams(RelativeLayout.ALIGN_PARENT_LEFT));
+		mFinalizeXButton.setVisibility(finalize ? VISIBLE : GONE);
 
 		if (touchMode == ShowcaseBox.TOUCH_NONE) {
 			showcaseDrawer = new NoTargetShowcaseDrawer(getResources());
-			mEndButton.setVisibility(VISIBLE);
+			mTickFollowButton.setVisibility(VISIBLE);
 		}
 		else {
 			showcaseDrawer = new TargetShowcaseDrawer(getResources());
-			mEndButton.setVisibility(GONE);
+			mTickFollowButton.setVisibility(GONE);
 		}
 
 		// Style
@@ -135,7 +130,7 @@ class ShowcaseView extends RelativeLayout implements View.OnTouchListener, ViewT
 					}
 				}
 				else {
-					mEndButton.setVisibility(VISIBLE);
+					mTickFollowButton.setVisibility(VISIBLE);
 					showcaseX = 0;
 					showcaseY = 0;
 					hasNoTarget = true;
@@ -188,23 +183,11 @@ class ShowcaseView extends RelativeLayout implements View.OnTouchListener, ViewT
 	 * @param listener Listener to listen to on click events
 	 */
 	public void setButtonsOnClickListener(OnClickListener listener) {
-		if (mEndButton != null) {
-			mEndButton.setOnClickListener(listener);
+		if (mTickFollowButton != null) {
+			mTickFollowButton.setOnClickListener(listener);
 		}
-		if (mFinalizeButton != null) {
-			mFinalizeButton.setOnClickListener(listener);
-		}
-	}
-
-	public void setRightButtonText(CharSequence text) {
-		if (mEndButton != null) {
-			mEndButton.setText(text);
-		}
-	}
-
-	public void setLeftButtonText(CharSequence text) {
-		if (mFinalizeButton != null) {
-			mFinalizeButton.setText(text);
+		if (mFinalizeXButton != null) {
+			mFinalizeXButton.setOnClickListener(listener);
 		}
 	}
 
@@ -297,7 +280,7 @@ class ShowcaseView extends RelativeLayout implements View.OnTouchListener, ViewT
 		else
 			if (mTouchMode == ShowcaseBox.TOUCH_TARGET) {
 				if (targetArea != null && targetArea.contains((int) motionEvent.getRawX(), (int) motionEvent.getRawY())) {
-					return !mEndButton.performClick();
+					return !mTickFollowButton.performClick();
 				}
 				else {
 					return true;
@@ -340,13 +323,13 @@ class ShowcaseView extends RelativeLayout implements View.OnTouchListener, ViewT
 	}
 
 	public void hideButton() {
-		mEndButton.setVisibility(GONE);
-		mFinalizeButton.setVisibility(GONE);
+		mTickFollowButton.setVisibility(GONE);
+		mFinalizeXButton.setVisibility(GONE);
 	}
 
 	public void showButton() {
-		mEndButton.setVisibility(VISIBLE);
-		mFinalizeButton.setVisibility(VISIBLE);
+		mTickFollowButton.setVisibility(VISIBLE);
+		mFinalizeXButton.setVisibility(VISIBLE);
 	}
 
 	/**
@@ -477,7 +460,7 @@ class ShowcaseView extends RelativeLayout implements View.OnTouchListener, ViewT
 	 *            button
 	 */
 	public void setButtonPosition(RelativeLayout.LayoutParams layoutParams) {
-		mEndButton.setLayoutParams(layoutParams);
+		mTickFollowButton.setLayoutParams(layoutParams);
 	}
 
 	/**
@@ -490,13 +473,7 @@ class ShowcaseView extends RelativeLayout implements View.OnTouchListener, ViewT
 
 	private void updateStyle(TypedArray styled, boolean invalidate) {
 		int backgroundColor = styled.getColor(R.styleable.ShowcaseView_sv_backgroundColor, Color.argb(230, 80, 80, 80));
-		int showcaseColor = styled.getColor(R.styleable.ShowcaseView_sv_showcaseColor, HOLO_BLUE);
-		String buttonText = styled.getString(R.styleable.ShowcaseView_sv_buttonText);
-		if (TextUtils.isEmpty(buttonText)) {
-			buttonText = getResources().getString(android.R.string.ok);
-		}
-		boolean tintButton = styled.getBoolean(R.styleable.ShowcaseView_sv_tintButtonColor, true);
-
+		int showcaseColor = styled.getColor(R.styleable.ShowcaseView_sv_showcaseColor, Color.argb(230, 84, 178, 169));
 		int titleTextAppearance = styled.getResourceId(R.styleable.ShowcaseView_sv_titleTextAppearance,
 				R.style.TextAppearance_ShowcaseView_Title);
 		int detailTextAppearance = styled.getResourceId(R.styleable.ShowcaseView_sv_detailTextAppearance,
@@ -506,9 +483,6 @@ class ShowcaseView extends RelativeLayout implements View.OnTouchListener, ViewT
 
 		showcaseDrawer.setShowcaseCircleColor(showcaseColor);
 		showcaseDrawer.setBackgroundColour(backgroundColor);
-		tintButton(showcaseColor, tintButton);
-		mEndButton.setText(buttonText);
-		mFinalizeButton.setBackgroundResource(R.color.gray_finalize);
 		textDrawer.setTitleStyling(titleTextAppearance);
 		textDrawer.setDetailStyling(detailTextAppearance);
 		hasAlteredText = true;
@@ -518,17 +492,8 @@ class ShowcaseView extends RelativeLayout implements View.OnTouchListener, ViewT
 		}
 	}
 
-	private void tintButton(int showcaseColor, boolean tintButton) {
-		if (tintButton) {
-			mEndButton.getBackground().setColorFilter(showcaseColor, PorterDuff.Mode.MULTIPLY);
-		}
-		else {
-			mEndButton.getBackground().setColorFilter(HOLO_BLUE, PorterDuff.Mode.MULTIPLY);
-		}
-	}
-
 	private RelativeLayout.LayoutParams getLayoutParams(int pos) {
-		int margin = (int) getResources().getDimension(R.dimen.button_margin);
+		int margin = (int) getResources().getDimension(R.dimen.button_padding);
 		RelativeLayout.LayoutParams lps = (LayoutParams) generateDefaultLayoutParams();
 		lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 		lps.addRule(pos);

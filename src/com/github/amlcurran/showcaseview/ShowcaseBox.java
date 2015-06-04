@@ -174,10 +174,10 @@ public class ShowcaseBox {
 				// Execute runnable
 				info.run();
 				
-				if ( v.getId() == R.id.btn_end )  {
+				if ( v.getId() == R.id.btn_tick_follow )  {
 					showNext(singleShot);
 				}
-				else if ( v.getId() == R.id.btn_finalize ) {
+				else if ( v.getId() == R.id.btn_finalize_x ) {
 					mShotStateStore.finished();
 					mShowcaseInfos.clear();
 				}

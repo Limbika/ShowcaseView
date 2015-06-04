@@ -1,17 +1,22 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="ShowcaseButton">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:minWidth">96dp</item>
-        <item name="android:minHeight">48dp</item>
+        <item name="android:layout_width">@dimen/button_size</item>
+        <item name="android:layout_height">@dimen/button_size</item>
         <item name="android:gravity">center</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">19sp</item>
-        <item name="android:padding">5dp</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:background">@drawable/button</item>
+        <item name="android:padding">@dimen/button_padding</item>
     </style>
+
+    <style name="ShowcaseButton.Tick_Follow" parent="@style/ShowcaseButton">
+        <item name="android:background">@drawable/button_tick_follow</item>
+        <item name="android:src">@drawable/ic_tick</item>
+    </style>
+
+    <style name="ShowcaseButton.Finalize_X" parent="@style/ShowcaseButton">
+        <item name="android:background">@drawable/button_finalize_x</item>
+        <item name="android:src">@drawable/ic_close</item>
+    </style>
+
     <style name="ShowcaseView.Light">
         <item name="sv_titleTextAppearance">@style/TextAppearance.ShowcaseView.Title</item>
         <item name="sv_detailTextAppearance">@style/TextAppearance.ShowcaseView.Detail.Light</item>
