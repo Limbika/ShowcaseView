@@ -473,7 +473,7 @@ class ShowcaseView extends RelativeLayout implements View.OnTouchListener, ViewT
 
 	private void updateStyle(TypedArray styled, boolean invalidate) {
 		int backgroundColor = styled.getColor(R.styleable.ShowcaseView_sv_backgroundColor, Color.argb(230, 80, 80, 80));
-		int showcaseColor = styled.getColor(R.styleable.ShowcaseView_sv_showcaseColor, Color.argb(230, 84, 178, 169));
+		int showcaseColor = styled.getColor(R.styleable.ShowcaseView_sv_showcaseColor, Color.argb(255, 84, 178, 169));
 		int titleTextAppearance = styled.getResourceId(R.styleable.ShowcaseView_sv_titleTextAppearance,
 				R.style.TextAppearance_ShowcaseView_Title);
 		int detailTextAppearance = styled.getResourceId(R.styleable.ShowcaseView_sv_detailTextAppearance,
