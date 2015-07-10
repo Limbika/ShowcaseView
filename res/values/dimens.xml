@@ -5,7 +5,7 @@
     <dimen name="stroke">2dp</dimen>
     <dimen name="text_padding">24dp</dimen>
     <dimen name="action_bar_offset">66dp</dimen>
-    <dimen name="showcase_radius">94dp</dimen>
+    <dimen name="showcase_radius">92dp</dimen>
     <dimen name="showcase_radius_inner">96dp</dimen>
     <dimen name="showcase_radius_outer">128dp</dimen>
     <dimen name="button_padding">16dp</dimen>

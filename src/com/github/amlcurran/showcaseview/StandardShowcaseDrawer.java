@@ -41,6 +41,7 @@ abstract class StandardShowcaseDrawer implements ShowcaseDrawer {
     @Override
     public void drawShowcase(Bitmap buffer, float x, float y, float scaleMultiplier) {
         Canvas bufferCanvas = new Canvas(buffer);
+        bufferCanvas.drawCircle(x, y, showcaseRadius, eraserPaint);
         int halfW = getShowcaseWidth() / 2;
         int halfH = getShowcaseHeight() / 2;
         int left = (int) (x - halfW);
